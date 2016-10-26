@@ -240,3 +240,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+# Visual files
+GeneticAlgorithm/GeneticAlgorithm.vcxproj
+GeneticAlgorithm/GeneticAlgorithm.vcxproj.filters
