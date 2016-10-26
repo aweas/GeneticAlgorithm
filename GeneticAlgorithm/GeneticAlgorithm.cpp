@@ -6,21 +6,17 @@
 
 int main()
 {
-	srand(10);
+	srand(time(NULL));
 	Fitness solution("1001101011100010110010101001100110011100101111000011010110001111");
-	Population test(10,true);
+	Population test(50,true);
 
-	for (int i = 0;i < 10;i++)
-		cout << test.getSpecimen(i).getGenes() << " F: " << test.getSpecimen(i).fitness(solution)<<endl;
+	Evolve evolution(test,solution);
 
-	cout << endl << endl;
-
-	Evolve evolution;
-	evolution.EvolvePop(test, solution);
-
-	for (int i = 0;i < 10;i++)
-		cout << test.getSpecimen(i).getGenes() << " F: " << test.getSpecimen(i).fitness(solution) << endl;
-
+	for (int i = 0;i < 40;i++)
+	{
+		evolution.EvolvePop();
+		cout << endl << "Fittest: " << test.getFittest(solution).getGenes() <<": "<<test.getFittest(solution).fitness(solution);
+	}
 	cin.get();
 }
 
