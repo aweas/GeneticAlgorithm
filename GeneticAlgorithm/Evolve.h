@@ -13,7 +13,7 @@ class Evolve
 		void fill();
 		void crossover();
 		Specimen select(int offset);
-		Specimen mutate();
+		void mutate(int index);
 	public:
 		Evolve(Population& pop, Fitness& sol);
 		void EvolvePop();
@@ -50,8 +50,8 @@ void Evolve::fill()
 
 	for (int i = 0;i < 5; i++)
 	{
-		int limit = (counter + (*population).populationSize / (3 * (i + 1)));
-		for (int j = counter; j < limit ; j++)
+		int limit = (counter + (*population).populationSize / (2 * (i + 1)));
+		for (int j = counter; j < limit, j<(*population).populationSize; j++)
 		{
 			(*population).addSpecimen(best[i].getGenes(), j);
 			counter++;
@@ -82,12 +82,32 @@ void Evolve::crossover()
 
 }
 
+void Evolve::mutate(int index)
+{
+	string newGenes;
+	string oldGenes = (*population).getSpecimen(index).getGenes();
+	for (int i = 0;i < 64;i++)
+	{
+		if (rand() % 1000 < 15)
+		{
+			if (rand() % 2 == 0)
+				newGenes += '0';
+			else
+				newGenes += '1';
+		}
+		else
+			newGenes += oldGenes[i];
+	}
+	(*population).addSpecimen(newGenes, index);
+}
+
 void Evolve::EvolvePop()
 {
 	sort();
 	fill();
 	crossover();
-	//mutate();
+	for(int i=0;i<(*population).populationSize;i++)
+		mutate(i);
 }
 
 
