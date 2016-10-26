@@ -3,6 +3,7 @@
 #ifdef POPULATION_H
 
 #include <vector>
+#include <iostream>
 #include "Specimen.h"
 
 using namespace std;
