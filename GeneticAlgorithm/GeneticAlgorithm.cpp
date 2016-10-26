@@ -12,11 +12,13 @@ int main()
 
 	Evolve evolution(test,solution);
 
-	for (int i = 0;i < 40;i++)
+	int i = 0;
+	for (i;i < 40, test.getFittest(solution).fitness(solution)!=64;i++)
 	{
 		evolution.EvolvePop();
-		cout << endl << "Fittest: " << test.getFittest(solution).getGenes() <<": "<<test.getFittest(solution).fitness(solution);
+		cout << endl << "Fittest: " <<test.getFittest(solution).fitness(solution);
 	}
+	cout << endl<<"Finished in: " << i << " generations";
 	cin.get();
 }
 
