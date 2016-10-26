@@ -30,6 +30,12 @@
     <ClInclude Include="Specimen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Fitness.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Evolve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

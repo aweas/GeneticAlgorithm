@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <time.h>
 #include <iostream>
+#include "Fitness.h"
 
 using namespace std;
 
@@ -14,11 +15,13 @@ class Specimen
 	private:
 		int genesLength=64;
 		char genes[64];
+		int fit=-1;
 
 	public:
 		void generate();
-		int fitness();
+		int fitness(Fitness solution);
 		string getGenes();
+		void setGenes(string data);
 };
 
 void Specimen::generate()
@@ -32,16 +35,29 @@ void Specimen::generate()
 	}
 }
 
-int Specimen::fitness()
+int Specimen::fitness(Fitness solution)
 {
-	return 9;
+	if (fit == -1)
+	{
+		string tempGenes;
+		for (int i = 0;i < genesLength;i++)
+			tempGenes += genes[i];
+		fit = solution.getFitness(tempGenes);
+	}
+	return fit;
 }
 
 string Specimen::getGenes()
 {
-	string temp;
-	for (int i = genesLength - 1;i >= 0;i--)
+	string temp="";
+	for (int i = 0; i<genesLength; i++)
 		temp += genes[i];
 	return temp;
+}
+
+void Specimen::setGenes(string data)
+{
+	for (int i = 0;i < data.length();i++)
+		genes[i] = data[i];
 }
 #endif

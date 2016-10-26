@@ -11,13 +11,15 @@ using namespace std;
 class Population
 {
 	private:
-		int populationSize;
 		Specimen * specimen;
 
 	public: 
+		int populationSize;
 		Population(int size, bool init);
 		Specimen getSpecimen(int index);
-		Specimen getFittest();
+		Specimen getFittest(Fitness solution);
+		void addSpecimen(string genes, int index);
+		void swap(int indexfrom, int indexto);
 };
 
 
@@ -42,15 +44,30 @@ Specimen Population::getSpecimen(int index)
 	return specimen[index];
 }
 
-Specimen Population::getFittest()
+Specimen Population::getFittest(Fitness solution)
 {
 	Specimen fittest = specimen[0];
 	for (int i = 1; i < populationSize; i++)
 	{
-		if (specimen[i].fitness() >= fittest.fitness())
+		if (specimen[i].fitness(solution) >= fittest.fitness(solution))
 			fittest = specimen[i];
 	}
 	
 	return fittest;
 }
+
+void Population::addSpecimen(string genes, int index)
+{
+	Specimen tempSpecimen;
+	tempSpecimen.setGenes(genes);
+	specimen[index] = tempSpecimen;
+}
+
+void Population::swap(int indexfrom, int indexto)
+{
+	Specimen temp = specimen[indexto];
+	specimen[indexto] = specimen[indexfrom];
+	specimen[indexfrom] = temp;
+}
+
 #endif
