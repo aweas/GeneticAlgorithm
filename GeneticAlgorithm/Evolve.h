@@ -3,7 +3,7 @@
 #ifdef EVOLVE_H
 
 #include "Population.h"
-
+//ToDo: write statistics on what is more efficient: mutation or crossover
 class Evolve
 {
 	private:
@@ -12,7 +12,7 @@ class Evolve
 		void sort();
 		void fill();
 		void crossover();
-		Specimen select(int offset);
+		Specimen select();
 		void mutate(int index);
 	public:
 		Evolve(Population& pop, Fitness& sol);
@@ -59,7 +59,7 @@ void Evolve::fill()
 	}
 }
 
-Specimen Evolve::select(int offset)
+Specimen Evolve::select()
 {
 	Population tournament(5, false);
 	for (int i = 0;i < 5;i++)
@@ -67,7 +67,6 @@ Specimen Evolve::select(int offset)
 		int pick = rand() % (*population).populationSize;
 		tournament.addSpecimen((*population).getSpecimen(pick).getGenes(), i);
 	}
-
 	return tournament.getFittest(*solution);
 }
 
@@ -75,8 +74,8 @@ void Evolve::crossover()
 {
 	for (int j = 1;j < (*population).populationSize; j++)
 	{
-		Specimen father = select(j);
-		Specimen mother = select(j);
+		Specimen father = select();
+		Specimen mother = select();
 		string genes;
 		for (int i = 0;i < father.getGenes().length(); i++)
 		{
@@ -86,6 +85,7 @@ void Evolve::crossover()
 				genes += mother.getGenes()[i];
 		}
 		(*population).addSpecimen(genes, j);
+		int fit = (*population).getSpecimen(j).fitness(*solution);
 	}
 }
 
@@ -95,7 +95,7 @@ void Evolve::mutate(int index)
 	string oldGenes = (*population).getSpecimen(index).getGenes();
 	for (int i = 0;i < 64;i++)
 	{
-		if (rand() % 1000 < 15)
+		if (rand() % 1000 <= 15)
 		{
 			if (rand() % 2 == 0)
 				newGenes += '0';
