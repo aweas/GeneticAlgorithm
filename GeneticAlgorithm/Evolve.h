@@ -61,25 +61,32 @@ void Evolve::fill()
 
 Specimen Evolve::select(int offset)
 {
-	int pick = rand() % ((*population).populationSize-offset)+offset;
-	return (*population).getSpecimen(pick);
+	Population tournament(5, false);
+	for (int i = 0;i < 5;i++)
+	{
+		int pick = rand() % (*population).populationSize;
+		tournament.addSpecimen((*population).getSpecimen(pick).getGenes(), i);
+	}
+
+	return tournament.getFittest(*solution);
 }
 
 void Evolve::crossover()
 {
-	for (int j = 0;j < (*population).populationSize; j++)
+	for (int j = 1;j < (*population).populationSize; j++)
 	{
 		Specimen father = select(j);
 		Specimen mother = select(j);
 		string genes;
 		for (int i = 0;i < father.getGenes().length(); i++)
+		{
 			if (rand() % 2 == 0)
 				genes += father.getGenes()[i];
 			else
 				genes += mother.getGenes()[i];
+		}
 		(*population).addSpecimen(genes, j);
 	}
-
 }
 
 void Evolve::mutate(int index)
@@ -106,7 +113,7 @@ void Evolve::EvolvePop()
 	sort();
 	fill();
 	crossover();
-	for(int i=0;i<(*population).populationSize;i++)
+	for(int i=1;i<(*population).populationSize;i++)
 		mutate(i);
 }
 
