@@ -1,0 +1,67 @@
+5 Elite
+limit size/2*i
+	50 population
+		Seed = 10
+			21 generations
+		Seed = 23
+			16 generations
+		Seed = 2312
+			23 generations
+	10 population
+		Seed = 10
+			63 generations
+		Seed = 23
+			117 generations
+		Seed = 2312
+			61 generations
+		Random seed * 20
+			81.0 generations
+			
+4 Elite
+limit size/2*i
+	50 population
+		Seed = 10
+			21 generations
+		Seed = 23
+			16 generations
+		Seed = 2312
+			23 generations
+	10 population
+		Seed = 10
+			63 generations
+		Seed = 23
+			117 generations
+		Seed = 2312
+			57 generations
+3 Elite
+limit size/2*i
+	50 population
+		Seed = 10
+			21 generations
+		Seed = 23
+			16 generations
+		Seed = 2312
+			16 generations
+	10 population
+		Seed = 10
+			63 generations
+		Seed = 23
+			117 generations
+		Seed = 2312
+			57 generations
+2 Elite
+limit size/2*i
+	50 population
+		Seed = 10
+			21 generations
+		Seed = 23
+			16 generations
+		Seed = 2312
+			23 generations
+	10 population
+		Seed = 10
+			64 generations
+		Seed = 23
+			144 generations
+		Seed = 2312
+			66 generations

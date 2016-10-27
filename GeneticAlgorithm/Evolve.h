@@ -14,15 +14,18 @@ class Evolve
 		void crossover();
 		Specimen select();
 		void mutate(int index);
+		int elite = 5;
+
 	public:
-		Evolve(Population& pop, Fitness& sol);
+		Evolve(Population& pop, Fitness& sol, int eliteI);
 		void EvolvePop();
 };
 
-Evolve::Evolve(Population& pop, Fitness& sol)
+Evolve::Evolve(Population& pop, Fitness& sol, int eliteI)
 {
 	population = &pop;
 	solution = &sol;
+	elite = eliteI;
 }
 
 void Evolve::sort()
@@ -35,12 +38,12 @@ void Evolve::sort()
 
 void Evolve::fill()
 {
-	Specimen best[5];
+	vector<Specimen> best;
 	Specimen temp;
 	int counter=0;
 
-	for (int i = 0;i < 5;i++)
-		best[i]=(*population).getSpecimen(i);
+	for (int i = 0;i < elite;i++)
+		best.push_back((*population).getSpecimen(i));
 
 	for (int i = 0;i < (*population).populationSize;i++)
 	{
@@ -48,10 +51,10 @@ void Evolve::fill()
 		(*population).addSpecimen(temp.getGenes(),i);
 	}
 
-	for (int i = 0;i < 5; i++)
+	for (int i = 0;i < elite; i++)
 	{
 		int limit = (counter + (*population).populationSize / (2 * (i + 1)));
-		for (int j = counter; j < limit, j<(*population).populationSize; j++)
+		for (int j = counter; j < limit && j<(*population).populationSize; j++)
 		{
 			(*population).addSpecimen(best[i].getGenes(), j);
 			counter++;

@@ -18,7 +18,6 @@ class Fitness
 Fitness::Fitness(string input)
 {
 	solution = input;
-	cout << "SOLUTION:" << endl << solution << endl<<endl;
 }
 
 int Fitness::getFitness(string specimenGenes)

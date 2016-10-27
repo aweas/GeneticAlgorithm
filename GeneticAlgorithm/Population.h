@@ -20,9 +20,14 @@ class Population
 		Specimen getFittest(Fitness solution);
 		void addSpecimen(string genes, int index);
 		void swap(int indexfrom, int indexto);
+		~Population();
 };
 
 
+Population::~Population()
+{
+	delete[] specimen;
+}
 
 Population::Population(int size, bool init)
 {
