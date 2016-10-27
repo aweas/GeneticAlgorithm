@@ -11,25 +11,36 @@ int main()
 	int j = 0;
 	int sum = 0;
 	std::clock_t start;
-	start = std::clock();
 
 	Fitness * solution;
 	Population * test;
 	Evolve * evolution;
 
-	int elite[4] = { 5,4,3,2 };
-	int pop[2] = { 10,50 };
+	//Test variables
+	int eliteNumbers[4] = { 5,4,3,2 };
+	int populationNumbers[2] = { 10,50 };
+	int repetitions = 70;
+
 	for (int e = 0;e < 4;e++)
 	{
 		for (int p = 0;p < 2;p++)
 		{
-			for (j; j < 2; j++)
+			for (j; j < repetitions; j++)
 			{
+				string solutionGenes;
+				for (int i = 0;i < 64;i++)
+					if (rand() % 2 == 0)
+						solutionGenes += '0';
+					else
+						solutionGenes += '1';
+
 				srand(time(NULL));
 
-				solution = new Fitness("1001101011100010110010101001100110011100101111000011010110001111");
-				test = new Population(pop[p], true);
-				evolution = new Evolve(*test, *solution, elite[e]);
+				start = std::clock();
+
+				solution = new Fitness(solutionGenes);
+				test = new Population(populationNumbers[p], true);
+				evolution = new Evolve(*test, *solution, eliteNumbers[e]);
 
 				int i = 0;
 				for (i; (*test).getFittest(*solution).fitness(*solution) != 64; i++)
@@ -41,13 +52,13 @@ int main()
 				delete test;
 				delete evolution;
 			}
-			float average = sum / 2;
+			float average = sum / repetitions;
 			double timer = (std::clock() - start) / (double)CLOCKS_PER_SEC;
 			
 			sum = 0;
 			start = clock();
 
-			printf("Elites: %i, Population: %i\n", elite[e], pop[p]);
+			printf("Elites: %i, Population: %i\n", eliteNumbers[e], populationNumbers[p]);
 			printf("Average of generations needed: %5.2f\n", average);
 			printf("Time needed: %4.1f s\n\n", timer);
 			j = 0;
