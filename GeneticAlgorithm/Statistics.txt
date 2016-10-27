@@ -1,67 +1,76 @@
+-------------------------------------------------
+ELITES NUMBER
+-------------------------------------------------
+
 5 Elite
 limit size/2*i
-	50 population
-		Seed = 10
-			21 generations
-		Seed = 23
-			16 generations
-		Seed = 2312
-			23 generations
-	10 population
-		Seed = 10
-			63 generations
-		Seed = 23
-			117 generations
-		Seed = 2312
-			61 generations
-		Random seed * 20
-			81.0 generations
+	Predefined seed * 20
+		10 population
+			58 generations
+			Average 6.4 s
+		50 population
+			15 generations
+			Average 10.9 s
 			
 4 Elite
 limit size/2*i
-	50 population
-		Seed = 10
-			21 generations
-		Seed = 23
-			16 generations
-		Seed = 2312
-			23 generations
-	10 population
-		Seed = 10
-			63 generations
-		Seed = 23
-			117 generations
-		Seed = 2312
-			57 generations
+	Predefined seed * 20
+		10 population		
+			56 generations
+			Average 9.2 s
+		50 population
+			14 generations
+			Average 11.9 s
+
 3 Elite
 limit size/2*i
-	50 population
-		Seed = 10
-			21 generations
-		Seed = 23
-			16 generations
-		Seed = 2312
-			16 generations
-	10 population
-		Seed = 10
-			63 generations
-		Seed = 23
-			117 generations
-		Seed = 2312
-			57 generations
+	Predefined seed * 20
+		10 population
+			61 generations
+			Average 3.4 s
+		50 population
+			13 generations
+			Average 11.2 s
+
 2 Elite
 limit size/2*i
-	50 population
-		Seed = 10
-			21 generations
-		Seed = 23
+	Predefined seed * 20
+		10 population
+			59 generations
+			Average 5.4 s
+		50 population
 			16 generations
-		Seed = 2312
-			23 generations
-	10 population
-		Seed = 10
-			64 generations
-		Seed = 23
-			144 generations
-		Seed = 2312
-			66 generations
+			Average 18.3 s
+
+-------------------------------------------------
+MUTATION RATE
+-------------------------------------------------
+
+3 Elite
+
+Mutation rate 5%
+	Predefined seed * 20
+		10 population
+			61 generations
+			Average 3.4 s
+		50 population
+			13 generations
+			Average 11.2 s
+
+Mutation rate 1.5%
+	Predefined seed * 20
+		10 population
+			84 generations
+			Average 6.1 s
+		50 population
+			19 generations
+			Average 10.6 s
+
+Mutation rate 7.5%
+	Predefined seed * 20
+		10 population
+			72 generations
+			Average 5.8 s
+		50 population
+			15 generations
+			Average 11.6 s

@@ -8,6 +8,7 @@
 
 int main()
 {
+	srand(10);
 	int j = 0;
 	int sum = 0;
 	std::clock_t start;
@@ -17,13 +18,13 @@ int main()
 	Evolve * evolution;
 
 	//Test variables
-	int eliteNumbers[4] = { 5,4,3,2 };
+	int eliteNumbers[4] = { 3,3,3,3 };
 	int populationNumbers[2] = { 10,50 };
-	int repetitions = 70;
+	int repetitions = 20;
 
 	for (int e = 0;e < 4;e++)
 	{
-		for (int p = 0;p < 2;p++)
+		for (int p = 0; p < 2; p++)
 		{
 			for (j; j < repetitions; j++)
 			{
@@ -34,7 +35,7 @@ int main()
 					else
 						solutionGenes += '1';
 
-				srand(time(NULL));
+				srand(rand());
 
 				start = std::clock();
 
@@ -47,7 +48,8 @@ int main()
 					(*evolution).EvolvePop();
 
 				sum += i;
-
+				if (j % 5 == 0)
+					printf("\rRepetitions: %i", j);
 				delete solution;
 				delete test;
 				delete evolution;
@@ -58,8 +60,8 @@ int main()
 			sum = 0;
 			start = clock();
 
-			printf("Elites: %i, Population: %i\n", eliteNumbers[e], populationNumbers[p]);
-			printf("Average of generations needed: %5.2f\n", average);
+			printf("\rElites: %i, Population: %i\n", eliteNumbers[e], populationNumbers[p]);
+			printf("Average of generations needed: %2f\n", average);
 			printf("Time needed: %4.1f s\n\n", timer);
 			j = 0;
 		}

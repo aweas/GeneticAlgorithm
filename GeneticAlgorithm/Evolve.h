@@ -1,6 +1,9 @@
 #pragma once
 #define EVOLVE_H
 #ifdef EVOLVE_H
+#define MUTATION_RATE 50
+
+
 
 #include "Population.h"
 //ToDo: write statistics on what is more efficient: mutation or crossover
@@ -64,8 +67,8 @@ void Evolve::fill()
 
 Specimen Evolve::select()
 {
-	Population tournament(5, false);
-	for (int i = 0;i < 5;i++)
+	Population tournament((*population).populationSize/2, false);
+	for (int i = 0;i < tournament.populationSize; i++)
 	{
 		int pick = rand() % (*population).populationSize;
 		tournament.addSpecimen((*population).getSpecimen(pick).getGenes(), i);
@@ -98,7 +101,7 @@ void Evolve::mutate(int index)
 	string oldGenes = (*population).getSpecimen(index).getGenes();
 	for (int i = 0;i < 64;i++)
 	{
-		if (rand() % 1000 <= 15)
+		if (rand() % 1000 <= MUTATION_RATE)
 		{
 			if (rand() % 2 == 0)
 				newGenes += '0';
