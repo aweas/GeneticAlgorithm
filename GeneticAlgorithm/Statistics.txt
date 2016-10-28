@@ -11,6 +11,28 @@ limit size/2*i
 		50 population
 			15 generations
 			Average 10.9 s
+	Predefined seed * 200
+		10 population
+			56 generations
+			Average 6.3 s
+		50 population
+			14 generations
+			Average 21.9 s
+limit size/3*i
+	Predefined seed * 20
+		10 population
+			63 generations
+			Average 13.7 s
+		50 population
+			15 generations
+			Average 10.9 s
+	Predefined seed * 200
+		10 population
+			? generations
+			Average ? s
+		50 population
+			? generations
+			Average ? s
 			
 4 Elite
 limit size/2*i
@@ -21,6 +43,28 @@ limit size/2*i
 		50 population
 			14 generations
 			Average 11.9 s
+	Predefined seed * 200
+		10 population
+			55 generations
+			Average 7.6 s
+		50 population
+			15 generations
+			Average 14.2 s
+limit size/3*i
+	Predefined seed * 20
+		10 population
+			61 generations
+			Average 6.4 s
+		50 population
+			14 generations
+			Average 16.1 s
+	Predefined seed * 200
+		10 population
+			? generations
+			Average ? s
+		50 population
+			? generations
+			Average ? s
 
 3 Elite
 limit size/2*i
@@ -31,7 +75,28 @@ limit size/2*i
 		50 population
 			13 generations
 			Average 11.2 s
-
+	Predefined seed * 200
+		10 population
+			56 generations
+			Average 4.6 s
+		50 population
+			15 generations
+			Average 4.6 s
+limit size/3*i
+	Predefined seed * 20
+		10 population
+			67 generations
+			Average 8.7 s
+		50 population
+			14 generations
+			Average 11.2 s
+	Predefined seed * 200
+		10 population
+			? generations
+			Average ? s
+		50 population
+			? generations
+			Average ? s
 2 Elite
 limit size/2*i
 	Predefined seed * 20
@@ -41,6 +106,28 @@ limit size/2*i
 		50 population
 			16 generations
 			Average 18.3 s
+	Predefined seed * 200
+		10 population
+			? generations
+			Average ? s
+		50 population
+			? generations
+			Average ? s
+limit size/3*i
+	Predefined seed * 20
+		10 population
+			80 generations
+			Average 6.9 s
+		50 population
+		15 generations
+			Average 11.7 s
+	Predefined seed * 200
+		10 population
+			? generations
+			Average ? s
+		50 population
+			? generations
+			Average ? s
 
 -------------------------------------------------
 MUTATION RATE
@@ -74,3 +161,20 @@ Mutation rate 7.5%
 		50 population
 			15 generations
 			Average 11.6 s
+
+-------------------------------------------------
+MUTATION / CROSSOVER SUCCESS RATE
+-------------------------------------------------
+Mutation rate 5%
+limit size/3*i
+	Elites: 3, Population: 10
+	Successful mutations: 232087, success rate: 6
+	Successful crossovers: 76203, success rate: 2
+limit size/2*i
+	Elites: 3, Population: 10
+	Successful mutations: 224685, success rate: 6
+	Successful crossovers: 78706, success rate: 2
+
+	Elites: 3, Population: 50
+	Successful mutations: 107815, success rate: 7
+	Successful crossovers: 19089, success rate: 1

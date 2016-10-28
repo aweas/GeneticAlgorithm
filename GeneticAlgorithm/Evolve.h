@@ -3,10 +3,9 @@
 #ifdef EVOLVE_H
 #define MUTATION_RATE 50
 
-
-
 #include "Population.h"
-//ToDo: write statistics on what is more efficient: mutation or crossover
+//ToDo: write statistics on success rate: mutation and crossover
+
 class Evolve
 {
 	private:
@@ -20,6 +19,10 @@ class Evolve
 		int elite = 5;
 
 	public:
+		int successCross = 0;
+		int successMut = 0;
+		double crossOp = 0;
+		double mutOp = 0;
 		Evolve(Population& pop, Fitness& sol, int eliteI);
 		void EvolvePop();
 };
@@ -82,6 +85,8 @@ void Evolve::crossover()
 	{
 		Specimen father = select();
 		Specimen mother = select();
+		int ffit = father.fitness(*solution);
+		int mfit = mother.fitness(*solution);;
 		string genes;
 		for (int i = 0;i < father.getGenes().length(); i++)
 		{
@@ -92,6 +97,9 @@ void Evolve::crossover()
 		}
 		(*population).addSpecimen(genes, j);
 		int fit = (*population).getSpecimen(j).fitness(*solution);
+		if (fit > ffit && fit > mfit)
+			successCross++;
+		crossOp++;
 	}
 }
 
@@ -99,6 +107,7 @@ void Evolve::mutate(int index)
 {
 	string newGenes;
 	string oldGenes = (*population).getSpecimen(index).getGenes();
+	int ofit = (*population).getSpecimen(index).fitness(*solution);
 	for (int i = 0;i < 64;i++)
 	{
 		if (rand() % 1000 <= MUTATION_RATE)
@@ -112,6 +121,9 @@ void Evolve::mutate(int index)
 			newGenes += oldGenes[i];
 	}
 	(*population).addSpecimen(newGenes, index);
+	if ((*population).getSpecimen(index).fitness(*solution) > ofit)
+		successMut++;
+	mutOp++;
 }
 
 void Evolve::EvolvePop()

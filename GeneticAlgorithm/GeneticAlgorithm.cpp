@@ -8,7 +8,7 @@
 
 int main()
 {
-	srand(10);
+	srand(time(NULL));
 	int j = 0;
 	int sum = 0;
 	std::clock_t start;
@@ -20,12 +20,17 @@ int main()
 	//Test variables
 	int eliteNumbers[4] = { 3,3,3,3 };
 	int populationNumbers[2] = { 10,50 };
-	int repetitions = 20;
+	int repetitions = 200;
 
-	for (int e = 0;e < 4;e++)
+	for (int e = 0;e < 1;e++)
 	{
 		for (int p = 0; p < 2; p++)
 		{
+			int successCross = 0;
+			int successMut = 0;
+			double crossOp = 0;
+			double mutOp = 0;
+
 			for (j; j < repetitions; j++)
 			{
 				string solutionGenes;
@@ -45,10 +50,16 @@ int main()
 
 				int i = 0;
 				for (i; (*test).getFittest(*solution).fitness(*solution) != 64; i++)
+				{
 					(*evolution).EvolvePop();
+					successCross += (*evolution).successCross;
+					successMut += (*evolution).successMut;
+					crossOp += (*evolution).crossOp;
+					mutOp += (*evolution).mutOp;
+				}
 
 				sum += i;
-				if (j % 5 == 0)
+				if (j % 10 == 0)
 					printf("\rRepetitions: %i", j);
 				delete solution;
 				delete test;
@@ -60,9 +71,14 @@ int main()
 			sum = 0;
 			start = clock();
 
+			int rateCross = successCross / crossOp * 100;
+			int rateMut = successMut / mutOp * 100;
+
 			printf("\rElites: %i, Population: %i\n", eliteNumbers[e], populationNumbers[p]);
-			printf("Average of generations needed: %2f\n", average);
-			printf("Time needed: %4.1f s\n\n", timer);
+			//printf("Average of generations needed: %2f\n", average);
+			//printf("Time needed: %4.1f s\n\n", timer);
+			printf("Successful mutations: %i, success rate: %i%", successMut, rateMut);
+			printf("\nSuccessful crossovers: %i, success rate: %i%\n\n", successCross, rateCross);
 			j = 0;
 		}
 	}
