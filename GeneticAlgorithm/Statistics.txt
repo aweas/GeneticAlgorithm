@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 -------------------------------------------------
 ELITES NUMBER
 -------------------------------------------------
@@ -178,3 +179,24 @@ limit size/2*i
 	Elites: 3, Population: 50
 	Successful mutations: 107815, success rate: 7
 	Successful crossovers: 19089, success rate: 1
+
+-------------------------------------------------
+SORTING ALGORITHM
+-------------------------------------------------
+Seed 493
+Solution length 100
+Pre-optimization
+	Population 50
+		Average of generations needed: 31
+		Time needed: 33.2 s	
+	Population: 10
+		Average of generations needed: 136
+		Time needed: 25.0 s
+
+Post-optimisation
+	Population: 50
+		Average of generations needed: 31
+		Time needed: 29.0 s
+	Population: 10
+		Average of generations needed: 136
+		Time needed: 22.9 s

@@ -7,23 +7,26 @@ using namespace std;
 
 class Fitness
 {
-	private:
-		string solution;
+private:
+	string solution;
 
-	public:
-		Fitness(string input);
-		int getFitness(string specimenGenes);
+public:
+	int solutionLength;
+	Fitness(string input);
+	int getFitness(string specimenGenes);
 };
 
 Fitness::Fitness(string input)
 {
 	solution = input;
+	solutionLength = solution.length();
+	cout << "Solution: " << input << endl;
 }
 
 int Fitness::getFitness(string specimenGenes)
 {
 	int fitness = 0;
-	for (int i = 0;i < 64;i++)
+	for (int i = 0;i < specimenGenes.length();i++)
 	{
 		if (specimenGenes[i] == solution[i])
 			fitness++;

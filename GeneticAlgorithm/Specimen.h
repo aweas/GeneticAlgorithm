@@ -2,6 +2,8 @@
 #define SPECIMEN_H
 #ifdef SPECIMEN_H
 
+#define SOLUTION_LENGTH 100 
+
 #include <string>
 #include <cstdlib>
 #include <time.h>
@@ -13,11 +15,11 @@ using namespace std;
 class Specimen
 {
 	private:
-		int genesLength=64;
-		char genes[64];
+		char genes[SOLUTION_LENGTH];
 		int fit=-1;
 
 	public:
+		int genesLength = SOLUTION_LENGTH;
 		void generate();
 		int fitness(Fitness solution);
 		string getGenes();

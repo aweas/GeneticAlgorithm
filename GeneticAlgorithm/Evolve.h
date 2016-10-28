@@ -1,30 +1,25 @@
 #pragma once
 #define EVOLVE_H
 #ifdef EVOLVE_H
-#define MUTATION_RATE 50
-
 #include "Population.h"
-//ToDo: write statistics on success rate: mutation and crossover
+
+#define MUTATION_RATE 50
 
 class Evolve
 {
-	private:
-		Population * population;
-		Fitness * solution;
-		void sort();
-		void fill();
-		void crossover();
-		Specimen select();
-		void mutate(int index);
-		int elite = 5;
+private:
+	Population * population;
+	Fitness * solution;
+	void sort();
+	void fill();
+	void crossover();
+	Specimen select();
+	void mutate(int index);
+	int elite = 5;
 
-	public:
-		int successCross = 0;
-		int successMut = 0;
-		double crossOp = 0;
-		double mutOp = 0;
-		Evolve(Population& pop, Fitness& sol, int eliteI);
-		void EvolvePop();
+public:
+	Evolve(Population& pop, Fitness& sol, int eliteI);
+	void EvolvePop();
 };
 
 Evolve::Evolve(Population& pop, Fitness& sol, int eliteI)
@@ -40,13 +35,25 @@ void Evolve::sort()
 		for (int j = 0;j < (*population).populationSize - 1;j++)
 			if ((*population).getSpecimen(j).fitness(*solution) < (*population).getSpecimen(j + 1).fitness(*solution))
 				(*population).swap(j, j + 1);
+
+	//int j;
+
+	//for (int i = 0; i < (*population).populationSize; i++) 
+	//{
+	//	j = i;
+	//	while (j > 0 && (*population).getSpecimen(j).fitness(*solution) > (*population).getSpecimen(j - 1).fitness(*solution))
+	//	{
+	//		(*population).swap(j, j - 1);
+	//		j--;
+	//	}
+	//}
 }
 
 void Evolve::fill()
 {
 	vector<Specimen> best;
 	Specimen temp;
-	int counter=0;
+	int counter = 0;
 
 	for (int i = 0;i < elite;i++)
 		best.push_back((*population).getSpecimen(i));
@@ -54,7 +61,7 @@ void Evolve::fill()
 	for (int i = 0;i < (*population).populationSize;i++)
 	{
 		temp.generate();
-		(*population).addSpecimen(temp.getGenes(),i);
+		(*population).addSpecimen(temp.getGenes(), i);
 	}
 
 	for (int i = 0;i < elite; i++)
@@ -70,8 +77,8 @@ void Evolve::fill()
 
 Specimen Evolve::select()
 {
-	Population tournament((*population).populationSize/2, false);
-	for (int i = 0;i < tournament.populationSize; i++)
+	Population tournament(5, false);
+	for (int i = 0;i < 5;i++)
 	{
 		int pick = rand() % (*population).populationSize;
 		tournament.addSpecimen((*population).getSpecimen(pick).getGenes(), i);
@@ -85,8 +92,6 @@ void Evolve::crossover()
 	{
 		Specimen father = select();
 		Specimen mother = select();
-		int ffit = father.fitness(*solution);
-		int mfit = mother.fitness(*solution);;
 		string genes;
 		for (int i = 0;i < father.getGenes().length(); i++)
 		{
@@ -97,9 +102,6 @@ void Evolve::crossover()
 		}
 		(*population).addSpecimen(genes, j);
 		int fit = (*population).getSpecimen(j).fitness(*solution);
-		if (fit > ffit && fit > mfit)
-			successCross++;
-		crossOp++;
 	}
 }
 
@@ -107,8 +109,7 @@ void Evolve::mutate(int index)
 {
 	string newGenes;
 	string oldGenes = (*population).getSpecimen(index).getGenes();
-	int ofit = (*population).getSpecimen(index).fitness(*solution);
-	for (int i = 0;i < 64;i++)
+	for (int i = 0;i < (*population).getSpecimen(index).genesLength;i++)
 	{
 		if (rand() % 1000 <= MUTATION_RATE)
 		{
@@ -121,9 +122,6 @@ void Evolve::mutate(int index)
 			newGenes += oldGenes[i];
 	}
 	(*population).addSpecimen(newGenes, index);
-	if ((*population).getSpecimen(index).fitness(*solution) > ofit)
-		successMut++;
-	mutOp++;
 }
 
 void Evolve::EvolvePop()
@@ -131,7 +129,7 @@ void Evolve::EvolvePop()
 	sort();
 	fill();
 	crossover();
-	for(int i=1;i<(*population).populationSize;i++)
+	for (int i = 1;i<(*population).populationSize;i++)
 		mutate(i);
 }
 
