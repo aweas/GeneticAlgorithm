@@ -6,14 +6,15 @@
 #include <cstdio>
 #include <ctime>
 
-#define POPULATION_SIZE 10
+#define POPULATION_SIZE 50
 #define ELITES_NUMBER 3
+#define SOLUTION_LENGTH 100
 
 string generateGenes();
 
 int main()
 {
-	srand(time(NULL));
+	srand(493);
 
 	int generationsCount = 0;
 	Fitness * solution;
@@ -29,7 +30,7 @@ int main()
 	printf("Elites: %i, Population: %i\n", ELITES_NUMBER, POPULATION_SIZE);
 	start = clock();
 
-	for (generationsCount; (*test).getFittest(*solution).fitness(*solution) != 64; generationsCount++)
+	for (generationsCount; (*test).getFittest(*solution).fitness(*solution) != (*solution).solutionLength ; generationsCount++)
 	{
 		(*evolution).EvolvePop();
 		if(generationsCount% (50/POPULATION_SIZE)==0)
@@ -38,14 +39,14 @@ int main()
 
 	double timer = (clock() - start) / (double)CLOCKS_PER_SEC;
 
-	printf("\nSolution found in %i generations\nTime: %f seconds", generationsCount-1,timer);
+	printf("\nSolution found in %i generations\nTime: %5.3f seconds", generationsCount-1,timer);
 	cin.get();
 }
 
 string generateGenes()
 {
 	string solutionGenes;
-	for (int i = 0;i < 64;i++)
+	for (int i = 0;i < SOLUTION_LENGTH;i++)
 		if (rand() % 2 == 0)
 			solutionGenes += '0';
 		else

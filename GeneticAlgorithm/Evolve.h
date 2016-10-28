@@ -97,7 +97,7 @@ void Evolve::mutate(int index)
 {
 	string newGenes;
 	string oldGenes = (*population).getSpecimen(index).getGenes();
-	for (int i = 0;i < 64;i++)
+	for (int i = 0;i < (*population).getSpecimen(index).genesLength ;i++)
 	{
 		if (rand() % 1000 <= MUTATION_RATE)
 		{
