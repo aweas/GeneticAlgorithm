@@ -31,22 +31,17 @@ Evolve::Evolve(Population& pop, Fitness& sol, int eliteI)
 
 void Evolve::sort()
 {
-	for (int i = 0;i<(*population).populationSize;i++)
-		for (int j = 0;j < (*population).populationSize - 1;j++)
-			if ((*population).getSpecimen(j).fitness(*solution) < (*population).getSpecimen(j + 1).fitness(*solution))
-				(*population).swap(j, j + 1);
+	int j;
 
-	//int j;
-
-	//for (int i = 0; i < (*population).populationSize; i++) 
-	//{
-	//	j = i;
-	//	while (j > 0 && (*population).getSpecimen(j).fitness(*solution) > (*population).getSpecimen(j - 1).fitness(*solution))
-	//	{
-	//		(*population).swap(j, j - 1);
-	//		j--;
-	//	}
-	//}
+	for (int i = 0; i < (*population).populationSize; i++) 
+	{
+		j = i;
+		while (j > 0 && (*population).getSpecimen(j).fitness(*solution) > (*population).getSpecimen(j - 1).fitness(*solution))
+		{
+			(*population).swap(j, j - 1);
+			j--;
+		}
+	}
 }
 
 void Evolve::fill()
