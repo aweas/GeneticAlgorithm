@@ -1,6 +1,20 @@
-Pre-optimization
+-------------------------------------------------
+SORTING ALGORITHM
+-------------------------------------------------
 Seed 493
-Population 50
 Solution length 100
-	Solution found in 31 generations
-	Time: 30.262 seconds
+Pre-optimization
+	Population 50
+		Average of generations needed: 31
+		Time needed: 33.2 s	
+	Population: 10
+		Average of generations needed: 136
+		Time needed: 25.0 s
+
+Post-optimisation
+	Population: 50
+		Average of generations needed: 31
+		Time needed: 29.0 s
+	Population: 10
+		Average of generations needed: 136
+		Time needed: 22.9 s
