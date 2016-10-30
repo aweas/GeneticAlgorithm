@@ -218,3 +218,25 @@ Repetitions: 10
 		Time from fitness 90: 19.8 s
 		Time from fitness 95: 17.0 s
 		Time from fitness 98: 12.6 s
+Repetitions: 50
+	Population: 10
+		Average of generations needed: 134
+		Time needed: 21.8 s
+		Time from fitness 90: 16.4 s
+		Time from fitness 95: 13.4 s
+		Time from fitness 98:  9.1 s
+	Population: 50
+		Average of generations needed: 26
+		Time needed: 22.9 s
+		Time from fitness 90: 13.9 s
+		Time from fitness 95: 10.5 s
+		Time from fitness 98:  6.7 s
+
+
+Repetitions: 50
+	Population: 10/50 (90%/10%)
+		Average of generations needed: 48
+		Time needed: 20.6 s
+		Time from fitness 90: 15.5 s
+		Time from fitness 95: 11.4 s
+		Time from fitness 98:  7.6 s
