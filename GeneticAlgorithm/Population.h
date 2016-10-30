@@ -15,6 +15,7 @@ class Population
 
 	public: 
 		int populationSize;
+		void setPopulation(int popSize);
 		Population(int size, bool init);
 		Specimen getSpecimen(int index);
 		Specimen getFittest(Fitness solution);
@@ -73,6 +74,27 @@ void Population::swap(int indexfrom, int indexto)
 	Specimen temp = specimen[indexto];
 	specimen[indexto] = specimen[indexfrom];
 	specimen[indexfrom] = temp;
+}
+
+void Population::setPopulation(int popSize)
+{ 
+	Specimen * temp;
+	temp = specimen;
+
+	specimen = new Specimen[popSize];
+	
+
+	for (int i = 0;i < populationSize;i++)
+		specimen[i] = temp[i];
+
+	for (int i = populationSize;i < popSize; i++)
+	{
+		Specimen tempSpecimen;
+		tempSpecimen.generate();
+		specimen[i] = tempSpecimen;
+	}
+
+	populationSize = popSize;
 }
 
 #endif

@@ -36,12 +36,12 @@ int main()
 
 	//Test variables
 	int eliteNumbers[4] = { 3,3,3,3 };
-	int populationNumbers[2] = { 50, 10 };
-	int repetitions = 200;
+	int populationNumbers[2] = { 10, 10 };
+	int repetitions = 1;
 
 	for (int e = 0; e < 1;e++)
 	{
-		for (int p = 0; p < 2; p++)
+		for (int p = 0; p < 1; p++)
 		{
 			for (int j=0; j < repetitions; j++)
 			{
@@ -56,12 +56,13 @@ int main()
 				for (generationsCount; (*test).getFittest(*solution).fitness(*solution) != SOLUTION_LENGTH; generationsCount++)
 				{
 					(*evolution).EvolvePop();
-					//if (generationsCount % (50 / populationNumbers[p]) == 0)
-					//	printf("#%i Fitness: %i\n", generationsCount, (*test).getFittest(*solution).fitness(*solution));
+					if (generationsCount % (50 / (*test).populationSize) == 0)
+						printf("#%i Fitness: %i\n", generationsCount, (*test).getFittest(*solution).fitness(*solution));
 					if ((*test).getFittest(*solution).fitness(*solution)>=90 && start90)
 					{
 						time90 = clock();
 						start90 = false;
+						(*test).setPopulation(50);
 					}
 					if ((*test).getFittest(*solution).fitness(*solution) >= 95 && start95)
 					{
@@ -85,7 +86,7 @@ int main()
 				start95 = true;
 				start98 = true;
 
-				if (j % 10 == 0)
+				if (j % 1 == 0)
 					printf("\rRepetitions: %i", j);
 				delete solution;
 				delete test;
