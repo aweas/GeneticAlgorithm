@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <ctime>
 
-#define POPULATION_SIZE 50
+#define POPULATION_SIZE 10
 #define ELITES_NUMBER 3
 #define SOLUTION_LENGTH 100
 
@@ -14,7 +14,7 @@ string generateGenes();
 
 int main()
 {
-	srand(493);
+	srand(time(NULL));
 
 	int generationsCount = 0;
 	Fitness * solution;
@@ -33,8 +33,11 @@ int main()
 	for (generationsCount; (*test).getFittest(*solution).fitness(*solution) != (*solution).solutionLength ; generationsCount++)
 	{
 		(*evolution).EvolvePop();
-		if(generationsCount% (50/POPULATION_SIZE)==0)
+		if(generationsCount% (50/(*test).populationSize)==0)
 			printf("#%i Fitness: %i\n", generationsCount, (*test).getFittest(*solution).fitness(*solution));
+		if ((*test).getFittest(*solution).fitness(*solution) >= (0.9*SOLUTION_LENGTH) && (*test).populationSize == POPULATION_SIZE)
+			(*test).setPopulation(50);
+
 	}
 
 	double timer = (clock() - start) / (double)CLOCKS_PER_SEC;
