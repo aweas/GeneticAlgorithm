@@ -29,12 +29,7 @@ class Specimen
 void Specimen::generate()
 {
 	for (int i = 0;i < genesLength;i++)
-	{
-		if (rand() % 2 == 0)
-			genes[i] = '0';
-		else
-			genes[i] = '1';
-	}
+		genes[i]= (char)(rand() % 2 + 48);
 }
 
 int Specimen::fitness(Fitness solution)

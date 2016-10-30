@@ -169,16 +169,16 @@ MUTATION / CROSSOVER SUCCESS RATE
 Mutation rate 5%
 limit size/3*i
 	Elites: 3, Population: 10
-	Successful mutations: 232087, success rate: 6
-	Successful crossovers: 76203, success rate: 2
+		Successful mutations: 232087, success rate: 6
+		Successful crossovers: 76203, success rate: 2
 limit size/2*i
 	Elites: 3, Population: 10
-	Successful mutations: 224685, success rate: 6
-	Successful crossovers: 78706, success rate: 2
+		Successful mutations: 224685, success rate: 6
+		Successful crossovers: 78706, success rate: 2
 
 	Elites: 3, Population: 50
-	Successful mutations: 107815, success rate: 7
-	Successful crossovers: 19089, success rate: 1
+		Successful mutations: 107815, success rate: 7
+		Successful crossovers: 19089, success rate: 1
 
 -------------------------------------------------
 SORTING ALGORITHM
@@ -196,7 +196,12 @@ Pre-optimization
 Post-optimisation
 	Population: 50
 		Average of generations needed: 31
-		Time needed: 29.0 s
+		Time needed: 28.2 s
 	Population: 10
 		Average of generations needed: 136
-		Time needed: 22.9 s
+		Time needed: 22.5 s
+
+-------------------------------------------------
+(UN)STABLE POPULATION
+-------------------------------------------------
+Stable:

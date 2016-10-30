@@ -14,10 +14,20 @@ string generateGenes();
 
 int main()
 {
-	srand(493);
-	int j = 0;
+	srand(935);
 	int sum = 0;
-	std::clock_t start;
+	double timer00 = 0;
+	std::clock_t time00;
+	std::clock_t time90;
+	double timer90 = 0;
+	bool start90 = true;
+	std::clock_t time95;
+	double timer95 = 0;
+	bool start95 = true;
+	std::clock_t time98;
+	double timer98 = 0;
+	bool start98 = true;
+	
 	int generationsCount = 0;
 
 	Fitness * solution;
@@ -26,29 +36,54 @@ int main()
 
 	//Test variables
 	int eliteNumbers[4] = { 3,3,3,3 };
-	int populationNumbers[2] = { POPULATION_SIZE,50 };
-	int repetitions = 1;
+	int populationNumbers[2] = { 50, 10 };
+	int repetitions = 200;
 
-	for (int e = 0;e < 1;e++)
+	for (int e = 0; e < 1;e++)
 	{
-		for (int p = 0; p < 1; p++)
+		for (int p = 0; p < 2; p++)
 		{
-			for (j; j < repetitions; j++)
+			for (int j=0; j < repetitions; j++)
 			{
-				//srand(rand());
+				srand(rand());
 
-				start = std::clock();
+				time00 = std::clock();
 				solution = new Fitness(generateGenes());
 				test = new Population(populationNumbers[p], true);
-				evolution = new Evolve(*test, *solution, eliteNumbers[e]);
+				evolution = new Evolve(*test, *solution, 3);
 
 
 				for (generationsCount; (*test).getFittest(*solution).fitness(*solution) != SOLUTION_LENGTH; generationsCount++)
 				{
 					(*evolution).EvolvePop();
-					if (generationsCount % (50 / POPULATION_SIZE ) == 0)
-						printf("#%i Fitness: %i\n", generationsCount, (*test).getFittest(*solution).fitness(*solution));
+					//if (generationsCount % (50 / populationNumbers[p]) == 0)
+					//	printf("#%i Fitness: %i\n", generationsCount, (*test).getFittest(*solution).fitness(*solution));
+					if ((*test).getFittest(*solution).fitness(*solution)>=90 && start90)
+					{
+						time90 = clock();
+						start90 = false;
+					}
+					if ((*test).getFittest(*solution).fitness(*solution) >= 95 && start95)
+					{
+						time95 = clock();
+						start95 = false;
+					}
+					if ((*test).getFittest(*solution).fitness(*solution)>=98 && start98)
+					{
+						time98 = clock();
+						start98 = false;
+					}
 				}
+
+				timer00 += (std::clock() - time00) / (double)CLOCKS_PER_SEC;
+				timer90 += (std::clock() - time90) / (double)CLOCKS_PER_SEC;
+				timer95 += (std::clock() - time95) / (double)CLOCKS_PER_SEC;
+				timer98 += (std::clock() - time98) / (double)CLOCKS_PER_SEC;
+
+				time00 = clock();
+				start90 = true;
+				start95 = true;
+				start98 = true;
 
 				if (j % 10 == 0)
 					printf("\rRepetitions: %i", j);
@@ -57,17 +92,21 @@ int main()
 				delete evolution;
 			}
 			float average = sum / repetitions;
-			double timer = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+			timer00 /= repetitions;
+			timer90 /= repetitions;
+			timer95 /= repetitions;
+			timer98 /= repetitions;
+			
+			printf("\rRepetitions: %i\nPopulation: %i\n", repetitions, populationNumbers[p]);
+			printf("Average of generations needed: %i\n", (generationsCount-1)/repetitions);
+			printf("Time needed: %4.1f s\n", timer00);
+			printf("Time from fitness 90: %4.1f s\n", timer90);
+			printf("Time from fitness 95: %4.1f s\n", timer95);
+			printf("Time from fitness 98: %4.1f s\n\n", timer98);
+			
+			generationsCount = 0;
 
 			sum = 0;
-			start = clock();
-
-			printf("\rElites: %i, Population: %i\n", eliteNumbers[e], populationNumbers[p]);
-			printf("Average of generations needed: %i\n", generationsCount-1);
-			printf("Time needed: %4.1f s\n\n", timer);
-			//printf("Successful mutations: %i, success rate: %i%", successMut, rateMut);
-			//printf("\nSuccessful crossovers: %i, success rate: %i%\n\n", successCross, rateCross);
-			j = 0;
 		}
 	}
 
@@ -78,9 +117,6 @@ string generateGenes()
 {
 	string solutionGenes;
 	for (int i = 0;i < SOLUTION_LENGTH;i++)
-		if (rand() % 2 == 0)
-			solutionGenes += '0';
-		else
-			solutionGenes += '1';
+		solutionGenes += (char)(rand() % 2 + 48);
 	return solutionGenes;
 }

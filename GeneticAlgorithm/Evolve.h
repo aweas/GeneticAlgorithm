@@ -31,17 +31,9 @@ Evolve::Evolve(Population& pop, Fitness& sol, int eliteI)
 
 void Evolve::sort()
 {
-	int j;
-
 	for (int i = 0; i < (*population).populationSize; i++) 
-	{
-		j = i;
-		while (j > 0 && (*population).getSpecimen(j).fitness(*solution) > (*population).getSpecimen(j - 1).fitness(*solution))
-		{
+		for(int j=i; j > 0 && (*population).getSpecimen(j).fitness(*solution) > (*population).getSpecimen(j - 1).fitness(*solution); j--)
 			(*population).swap(j, j - 1);
-			j--;
-		}
-	}
 }
 
 void Evolve::fill()
@@ -107,12 +99,7 @@ void Evolve::mutate(int index)
 	for (int i = 0;i < (*population).getSpecimen(index).genesLength;i++)
 	{
 		if (rand() % 1000 <= MUTATION_RATE)
-		{
-			if (rand() % 2 == 0)
-				newGenes += '0';
-			else
-				newGenes += '1';
-		}
+			newGenes += (char)(rand() % 2 + 48);
 		else
 			newGenes += oldGenes[i];
 	}

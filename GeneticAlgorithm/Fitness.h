@@ -20,7 +20,7 @@ Fitness::Fitness(string input)
 {
 	solution = input;
 	solutionLength = solution.length();
-	cout << "Solution: " << input << endl;
+	//cout << "Solution: " << hex << solution << endl;
 }
 
 int Fitness::getFitness(string specimenGenes)
