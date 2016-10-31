@@ -199,7 +199,6 @@ Post-optimisation
 	Population: 10
 		Average of generations needed: 136
 		Time needed: 22.5 s
-
 -------------------------------------------------
 (UN)STABLE POPULATION
 -------------------------------------------------
@@ -240,3 +239,27 @@ Repetitions: 50
 		Time from fitness 90: 15.5 s
 		Time from fitness 95: 11.4 s
 		Time from fitness 98:  7.6 s
+
+-------------------------------------------------
+BRANCH PREDICTION CORRECTION
+-------------------------------------------------
+Seed: 1084
+Pre:
+	Repetitions: 1
+	Population: 50
+	Average of generations needed: 22
+	Time needed: 20.7 s
+	Time from fitness 90: 12.3 s
+	Time from fitness 95: 10.5 s
+	Time from fitness 98:  7.8 s
+
+Post:
+	Repetitions: 1
+	Population: 50
+	Average of generations needed: 22
+	Time needed: 19.7 s
+	Time from fitness 90: 11.9 s
+	Time from fitness 95: 10.2 s
+	Time from fitness 98:  7.7 s
+
+//w00t

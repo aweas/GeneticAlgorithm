@@ -14,7 +14,7 @@ string generateGenes();
 
 int main()
 {
-	srand(935);
+	srand(time(NULL));
 	int sum = 0;
 	double timer00 = 0;
 	std::clock_t time00;
@@ -36,8 +36,8 @@ int main()
 
 	//Test variables
 	int eliteNumbers[4] = { 3,3,3,3 };
-	int populationNumbers[2] = { 50, 10 };
-	int repetitions = 50;
+	int populationNumbers[2] = { 10, 10 };
+	int repetitions = 1;
 
 	for (int e = 0; e < 1;e++)
 	{
@@ -56,13 +56,13 @@ int main()
 				for (generationsCount; (*test).getFittest(*solution).fitness(*solution) != SOLUTION_LENGTH; generationsCount++)
 				{
 					(*evolution).EvolvePop();
-					//if (generationsCount % (50 / (*test).populationSize) == 0)
-					//	printf("#%i Fitness: %i\n", generationsCount, (*test).getFittest(*solution).fitness(*solution));
+					if (generationsCount % (50 / (*test).populationSize) == 0)
+						printf("#%i Fitness: %i\n", generationsCount, (*test).getFittest(*solution).fitness(*solution));
 					if ((*test).getFittest(*solution).fitness(*solution)>=90 && start90)
 					{
 						time90 = clock();
 						start90 = false;
-						//(*test).setPopulation(50);
+						(*test).setPopulation(50);
 					}
 					if ((*test).getFittest(*solution).fitness(*solution) >= 95 && start95)
 					{
