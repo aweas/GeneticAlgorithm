@@ -35,7 +35,7 @@ int main()
 		(*evolution).EvolvePop();
 		if(generationsCount% (50/(*test).populationSize)==0)
 			printf("#%i Fitness: %i\n", generationsCount, (*test).getFittest(*solution).fitness(*solution));
-		if ((*test).getFittest(*solution).fitness(*solution) >= (0.9*SOLUTION_LENGTH) && (*test).populationSize == POPULATION_SIZE)
+		if ((*test).getFittest(*solution).fitness(*solution) >= (0.95*SOLUTION_LENGTH) && (*test).populationSize == POPULATION_SIZE)
 			(*test).setPopulation(50);
 
 	}
