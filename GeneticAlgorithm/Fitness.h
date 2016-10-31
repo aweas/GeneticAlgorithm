@@ -26,11 +26,13 @@ Fitness::Fitness(string input)
 int Fitness::getFitness(string specimenGenes)
 {
 	int fitness = 0;
-	for (int i = 0;i < specimenGenes.length() ;i++)
+	//Branch prediction workaround (http://stackoverflow.com/questions/11227809/why-is-it-faster-to-process-a-sorted-array-than-an-unsorted-array?rq=1)
+	for (int i = 0;i < specimenGenes.length();i++)
 	{
-		if (specimenGenes[i] == solution[i])
-			fitness++;
+		int t = (specimenGenes[i] - solution[i]);
+		fitness += abs(t);
 	}
+	fitness = specimenGenes.length() - fitness;
 	return fitness;
 }
 #endif
