@@ -268,4 +268,11 @@ Post:
 		Time from fitness 90: 14.1 s
 		Time from fitness 95: 11.1 s
 		Time from fitness 98:  6.8 s
+	Repetitions: 1000
+		Population: 10/50 (95%/5%)
+		Average of generations needed: 63
+		Time needed: 18.8 s
+		Time from fitness 90: 13.8 s
+		Time from fitness 95: 11.0 s
+		Time from fitness 98:  6.8 s
 //w00t

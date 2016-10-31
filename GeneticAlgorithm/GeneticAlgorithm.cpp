@@ -14,7 +14,7 @@ string generateGenes();
 
 int main()
 {
-	srand(1084);
+	srand(time(NULL));
 	int sum = 0;
 	double timer00 = 0;
 	std::clock_t time00;
@@ -37,7 +37,7 @@ int main()
 	//Test variables
 	int eliteNumbers[4] = { 3,3,3,3 };
 	int populationNumbers[2] = { 10, 10 };
-	int repetitions = 100;
+	int repetitions = 1000;
 
 	for (int e = 0; e < 1;e++)
 	{
