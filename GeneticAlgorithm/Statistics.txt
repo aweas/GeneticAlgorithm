@@ -256,10 +256,16 @@ Pre:
 Post:
 	Repetitions: 1
 	Population: 50
-	Average of generations needed: 22
-	Time needed: 19.7 s
-	Time from fitness 90: 11.9 s
-	Time from fitness 95: 10.2 s
-	Time from fitness 98:  7.7 s
-
+		Average of generations needed: 22
+		Time needed: 19.7 s
+		Time from fitness 90: 11.9 s
+		Time from fitness 95: 10.2 s
+		Time from fitness 98:  7.7 s
+	Repetitions: 100
+	Population: 10/50 (95%/5%)
+		Average of generations needed: 62
+		Time needed: 19.3 s
+		Time from fitness 90: 14.1 s
+		Time from fitness 95: 11.1 s
+		Time from fitness 98:  6.8 s
 //w00t
