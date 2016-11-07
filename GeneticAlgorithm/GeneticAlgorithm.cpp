@@ -1,3 +1,4 @@
+
 #include "stdafx.h"
 #include "Population.h"
 #include "Evolve.h"
@@ -8,12 +9,42 @@
 
 #define POPULATION_SIZE 10
 #define ELITES_NUMBER 3
-#define SOLUTION_LENGTH 100
+#define SOLUTION_LENGTH 901030
 
 string generateGenes();
+string decToBin(int num);
 
 int main()
 {
+	int i;
+	FILE* f = fopen("C:\\Users\\wwydm\\Desktop\\Bez tytu³u.bmp", "rb");
+	FILE* o = fopen("C:\\Users\\wwydm\\Desktop\\test.bmp", "wb");
+	unsigned char info[54];
+
+	fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header									   
+	int width = *(int*)&info[18];			// extract image height and width from header
+	int height = *(int*)&info[22];
+	int size = 3 * width * height;
+	fclose(f);
+
+	
+
+	//char* newbuf = new char[size];
+
+	//long bufpos = 0;
+
+	//for (int y = 0; y < height; y++)
+	//	for (int x = 0; x < 3 * width; x += 3)
+	//	{
+	//		bufpos = y * 3 * width + x;     // position in original buffer
+	//		newbuf[bufpos] = rand() % 255;       // swap r and b
+	//		newbuf[bufpos + 1] = rand() % 255; // g stays
+	//		newbuf[bufpos + 2] = rand() % 255;     // swap b and r
+	//	}
+
+	//fwrite(info, sizeof(char),54,o);
+	//fwrite(newbuf, sizeof(char), size, o);
+	//cin.get();
 	srand(time(NULL));
 
 	int generationsCount = 0;
@@ -49,10 +80,39 @@ int main()
 string generateGenes()
 {
 	string solutionGenes;
-	for (int i = 0;i < SOLUTION_LENGTH;i++)
-		if (rand() % 2 == 0)
-			solutionGenes += '0';
-		else
-			solutionGenes += '1';
+	FILE* f = fopen("C:\\Users\\wwydm\\Desktop\\Bez tytu³u.bmp", "rb");
+	unsigned char info[54];
+	fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
+
+	int width = *(int*)&info[18];			// extract image height and width from header
+	int height = *(int*)&info[22];
+
+	int size = 3 * width * height;
+	unsigned char* data = new unsigned char[size]; // allocate 3 bytes per pixel
+	fread(data, sizeof(unsigned char), size, f); // read the rest of the data at once
+	fclose(f);
+
+	for (int i = 0; i < size; i += 3)
+	{
+		unsigned char tmp = data[i];
+		data[i] = data[i + 2];
+		data[i + 2] = tmp;
+
+		solutionGenes += decToBin(data[i]);
+		solutionGenes += decToBin(data[i + 1]);
+		solutionGenes += decToBin(data[i + 2]);
+	}
+
 	return solutionGenes;
+}
+
+string decToBin(int number)
+{
+	if (number == 0) return "0";
+	if (number == 1) return "1";
+
+	if (number % 2 == 0)
+		return decToBin(number / 2) + "0";
+	else
+		return decToBin(number / 2) + "1";
 }

@@ -2,7 +2,7 @@
 #define SPECIMEN_H
 #ifdef SPECIMEN_H
 
-#define SOLUTION_LENGTH 100 
+#define SOLUTION_LENGTH 901030 
 
 #include <string>
 #include <cstdlib>
