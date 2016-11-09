@@ -17,13 +17,15 @@
 
 #define POPULATION_SIZE 10
 #define ELITES_NUMBER 3
-#define SOLUTION_LENGTH 30000
+#define SOLUTION_LENGTH 100
+
 using namespace cv;
 using namespace std;
 
 void showCircle(Mat img, char genes[]);
 void compareResult(Mat image);
 int BinToDec(string number);
+char* generateGenes();
 
 Mat img; Mat templ; Mat result;
 char* image_window = "Source Image";
@@ -34,13 +36,16 @@ int max_Trackbar = 5;
 
 int main(int argc, char** argv)
 {
+	srand(time(NULL));
 
 	// Create black empty images
 	Mat image = Mat::zeros(511, 511, CV_8UC3);
 
 	// Draw a circle 
 	//circle(image, Point(200, 200), 32.0, Scalar(0, 0, 255), -1, 8);
-	showCircle(image, "110001100110101110");
+	char* genes = generateGenes();
+	cout << genes << endl;
+	showCircle(image, genes);
 
 	imshow("Image", image);
 	compareResult(image);
@@ -50,19 +55,25 @@ int main(int argc, char** argv)
 
 void showCircle(Mat img, char genes[])
 {
+	int circlesNum = SOLUTION_LENGTH/18;
 	int currentGene=0;
-	string numX;
-	string numY;
 
-	for (int i=0;i < 9;i++, currentGene++)
-		numX += genes[currentGene];
-	for (int i = 0;i < 9;i++, currentGene++)
-		numY += genes[currentGene];
+	for (int j = 0;j < circlesNum;j++)
+	{
+		string numX = "";
+		string numY = "";
 
-	int coordX = BinToDec(numX);
-	int coordY = BinToDec(numY);
-	cout << coordX << " : " << coordY << endl;
-	circle(img, Point(coordX, coordY), 32.0, Scalar(0, 0, 255), -1, 8);
+		for (int i = 0;i < 9;i++, currentGene++)
+			numX += genes[currentGene];
+		for (int i = 0;i < 9;i++, currentGene++)
+			numY += genes[currentGene];
+		int coordX = BinToDec(numX);
+		int coordY = BinToDec(numY);
+		cout << coordX <<" : "<< coordY <<endl;
+
+		circle(img, Point(coordX, coordY), 32.0, Scalar(0, 0, 255), -1, 8);
+	}
+	
 }
 
 int BinToDec(string number)
@@ -156,4 +167,16 @@ void compareResult(Mat image)
 	printf("Similarity: %f %c\n", test1_sum / 3, '%');
 
 	printf("Done \n");
+}
+
+char* generateGenes()
+{
+	char solutionGenes[SOLUTION_LENGTH];
+
+	for (int i = 0;i < SOLUTION_LENGTH;i++)
+		if (rand() % 2 == 0)
+			solutionGenes[i] = '0';
+		else
+			solutionGenes[i] = '1';
+	return solutionGenes;
 }
