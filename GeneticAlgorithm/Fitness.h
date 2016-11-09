@@ -22,10 +22,10 @@ class Fitness
 
 	public:
 		int solutionLength;
-		int getFitness(Mat image);
+		double getFitness(Mat image);
 };
 
-int Fitness::getFitness(Mat image)
+double Fitness::getFitness(Mat image)
 {
 	/*				WORKING IMAGE COMPARISION		*/
 	Mat src_base, hsv_base;
@@ -43,7 +43,7 @@ int Fitness::getFitness(Mat image)
 		cout << "No image found, or not opened .exe directly";
 		cin.get();
 	}
-	cout << 1;
+
 	/// Convert to HSV
 	cvtColor(src_base, hsv_base, COLOR_BGR2HSV);
 	cvtColor(src_test1, hsv_test1, COLOR_BGR2HSV);
@@ -74,7 +74,6 @@ int Fitness::getFitness(Mat image)
 
 	double max_base_value[4] = { 1,1000,46.739756, 1 };
 	double test1_sum = 0;
-	cout << "Comparing start" << endl;
 
 	/// Apply the histogram comparison methods
 	for (int i = 0; i < 4; i++)
@@ -90,10 +89,10 @@ int Fitness::getFitness(Mat image)
 		else if (i == 3)
 			test1_sum += (1 - base_test1) / max_base_value[i] * 100;
 	}
-	printf("Similarity: %f %c\n", test1_sum / 3, '%');
+	//printf("Similarity: %f %c\n", test1_sum / 3, '%');
 
 	//imshow("Image", image);
 
-	return test1_sum * 1000;
+	return test1_sum/3;
 }
 #endif

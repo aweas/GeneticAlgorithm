@@ -2,7 +2,7 @@
 #define SPECIMEN_H
 #ifdef SPECIMEN_H
 
-#define SOLUTION_LENGTH 2491 
+#define SOLUTION_LENGTH 2515 
 
 #include <string>
 #include <cstdlib>
@@ -17,12 +17,12 @@ class Specimen
 {
 	private:
 		char genes[SOLUTION_LENGTH];
-		int fit=-1;
+		double fit=-1;
 
 	public:
 		double genesLength = SOLUTION_LENGTH;
 		void generate();
-		int fitness(Fitness solution);
+		double fitness(Fitness solution);
 		string getGenes();
 		Mat image;
 		void setGenes(string data);
@@ -32,13 +32,26 @@ class Specimen
 
 void Specimen::showCircle(char genes[])
 {
-	int circlesNum = SOLUTION_LENGTH / 47;
+	int circlesNum = (SOLUTION_LENGTH-24) / 47;
 	int currentGene = 0;
 
+	string temp = "";
+	for (int i = 0;i < 8;i++, currentGene++)
+		temp += genes[currentGene];
+	int R = BinToDec(temp);
+	temp = "";
+	for (int i = 0;i < 8;i++, currentGene++)
+		temp += genes[currentGene];
+	int G = BinToDec(temp);
+	temp = "";
+	for (int i = 0;i < 8;i++, currentGene++)
+		temp += genes[currentGene];
+	int B= BinToDec(temp);
+	temp = "";
+
+	image.setTo(cv::Scalar(R, G, B));
 	for (int j = 0;j < circlesNum;j++)
 	{
-		string temp = "";
-
 		for (int i = 0;i < 9;i++, currentGene++)
 			temp += genes[currentGene];
 		int coordX = BinToDec(temp);
@@ -85,7 +98,7 @@ void Specimen::generate()
 	}
 }
 
-int Specimen::fitness(Fitness solution)
+double Specimen::fitness(Fitness solution)
 {
 	if (fit == -1)
 	{
@@ -93,6 +106,7 @@ int Specimen::fitness(Fitness solution)
 		showCircle(genes);
 		fit = solution.getFitness(image);
 	}
+
 	return fit;
 }
 
