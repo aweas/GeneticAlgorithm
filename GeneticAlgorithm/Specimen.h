@@ -2,7 +2,7 @@
 #define SPECIMEN_H
 #ifdef SPECIMEN_H
 
-#define SOLUTION_LENGTH 30000 
+#define SOLUTION_LENGTH 2491 
 
 #include <string>
 #include <cstdlib>
@@ -11,6 +11,7 @@
 #include "Fitness.h"
 
 using namespace std;
+using namespace cv;
 
 class Specimen
 {
@@ -23,8 +24,55 @@ class Specimen
 		void generate();
 		int fitness(Fitness solution);
 		string getGenes();
+		Mat image;
 		void setGenes(string data);
+		void showCircle(char genes[]);
+		int BinToDec(string number);
 };
+
+void Specimen::showCircle(char genes[])
+{
+	int circlesNum = SOLUTION_LENGTH / 47;
+	int currentGene = 0;
+
+	for (int j = 0;j < circlesNum;j++)
+	{
+		string temp = "";
+
+		for (int i = 0;i < 9;i++, currentGene++)
+			temp += genes[currentGene];
+		int coordX = BinToDec(temp);
+		temp = "";
+
+		for (int i = 0;i < 9;i++, currentGene++)
+			temp += genes[currentGene];
+		int coordY = BinToDec(temp);
+		temp = "";
+
+		for (int i = 0;i < 5;i++, currentGene++)
+			temp += genes[currentGene];
+		int radius = BinToDec(temp);
+		temp = "";
+
+		for (int i = 0;i < 8;i++, currentGene++)
+			temp += genes[currentGene];
+		int R = BinToDec(temp);
+		temp = "";
+		for (int i = 0;i < 8;i++, currentGene++)
+			temp += genes[currentGene];
+		int G = BinToDec(temp);
+		temp = "";
+		for (int i = 0;i < 8;i++, currentGene++)
+			temp += genes[currentGene];
+		int B = BinToDec(temp);
+		temp = "";
+
+		//cout << coordX << " : " << coordY << "   " << radius << endl;
+
+		circle(image, Point(coordX, coordY), radius, Scalar(R, G, B), -1, 8);
+	}
+
+}
 
 void Specimen::generate()
 {
@@ -41,10 +89,9 @@ int Specimen::fitness(Fitness solution)
 {
 	if (fit == -1)
 	{
-		string tempGenes;
-		for (int i = 0;i < genesLength;i++)
-			tempGenes += genes[i];
-		fit = solution.getFitness(tempGenes);
+		image = Mat::zeros(511, 511, CV_8UC3);
+		showCircle(genes);
+		fit = solution.getFitness(image);
 	}
 	return fit;
 }
@@ -61,5 +108,14 @@ void Specimen::setGenes(string data)
 {
 	for (int i = 0;i < data.length();i++)
 		genes[i] = data[i];
+}
+
+int Specimen::BinToDec(string number)
+{
+	int result = 0, pow = 1;
+	for (int i = number.length() - 1; i >= 0; --i, pow <<= 1)
+		result += (number[i] - '0') * pow;
+
+	return result;
 }
 #endif
