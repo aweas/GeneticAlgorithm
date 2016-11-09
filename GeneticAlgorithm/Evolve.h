@@ -18,6 +18,11 @@ class Evolve
 		int elite = 5;
 
 	public:
+		double timeSort;
+		double timeFill;
+		double timeCross;
+		double timeMutate;
+
 		Evolve(Population& pop, Fitness& sol, int eliteI);
 		void EvolvePop();
 };
@@ -72,31 +77,50 @@ void Evolve::fill()
 
 Specimen Evolve::select()
 {
-	Population tournament(5, false);
-	for (int i = 0;i < 5;i++)
+	std::clock_t sortClock;
+	
+	Population tournament(2, false);
+	static int max = (*population).populationSize;
+	for (int i = 0;i < 2;i++)
 	{
-		int pick = rand() % (*population).populationSize;
-		tournament.addSpecimen((*population).getSpecimen(pick).getGenes(), i);
+		int pick = rand() % max;
+
+		
+		string genes = (*population).getSpecimen(pick).getGenes();
+		
+
+		tournament.addSpecimen(genes, i);
 	}
+	
 	return tournament.getFittest(*solution);
 }
 
 void Evolve::crossover()
 {
-	for (int j = 1;j < (*population).populationSize; j++)
+	std::clock_t sortClock;
+	Specimen father = select();
+	
+	static int max = father.getGenes().length();
+	static int maxPop = (*population).populationSize;
+	for (int j = 1;j < maxPop; j++)
 	{
+		
 		Specimen father = select();
 		Specimen mother = select();
 		string genes;
-		for (int i = 0;i < father.getGenes().length(); i++)
+
+		for (int i = 0;i < max; i++)
 		{
-			if (rand() % 2 == 0)
-				genes += father.getGenes()[i];
-			else
-				genes += mother.getGenes()[i];
+			string gene[2] = { father.getGenes(i), mother.getGenes(i) };
+			int pick = rand() % 2;	
+			genes += gene[pick];
 		}
-		(*population).addSpecimen(genes, j);
-		int fit = (*population).getSpecimen(j).fitness(*solution);
+		
+		(*population).addSpecimen(genes, j);	
+
+		sortClock = clock();
+		//int fit = (*population).getSpecimen(j).fitness(*solution);
+		timeSort += (clock() - sortClock) / (double)CLOCKS_PER_SEC;
 	}
 }
 
@@ -104,7 +128,9 @@ void Evolve::mutate(int index)
 {
 	string newGenes;
 	string oldGenes = (*population).getSpecimen(index).getGenes();
-	for (int i = 0;i < (*population).getSpecimen(index).genesLength ;i++)
+
+	static int max = (*population).getSpecimen(index).genesLength;
+	for (int i = 0; i < max; i++)
 	{
 		if (rand() % 1000 <= MUTATION_RATE)
 		{
@@ -116,16 +142,34 @@ void Evolve::mutate(int index)
 		else
 			newGenes += oldGenes[i];
 	}
+
 	(*population).addSpecimen(newGenes, index);
 }
 
 void Evolve::EvolvePop()
 {
+	std::clock_t sortClock;
+	std::clock_t fillClock;
+	std::clock_t crossClock;
+	std::clock_t mutateClock;
+
+	sortClock = clock();
 	sort();
+	timeSort+= (clock() - sortClock) / (double)CLOCKS_PER_SEC;
+
+	fillClock = clock();
 	fill();
+	timeFill += (clock() - fillClock) / (double)CLOCKS_PER_SEC;
+
+	crossClock = clock();
 	crossover();
-	for(int i=1;i<(*population).populationSize;i++)
+	timeCross += (clock() - crossClock) / (double)CLOCKS_PER_SEC;
+
+	sortClock = clock();
+	static int max = (*population).populationSize;
+	for(int i=1;i<max;i++)
 		mutate(i);
+	timeMutate += (clock() - sortClock) / (double)CLOCKS_PER_SEC;
 }
 
 

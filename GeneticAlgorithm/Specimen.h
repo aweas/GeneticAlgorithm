@@ -24,6 +24,7 @@ class Specimen
 		void generate();
 		double fitness(Fitness solution);
 		string getGenes();
+		string getGenes(int i);
 		Mat image;
 		void setGenes(string data);
 		void showCircle(char genes[]);
@@ -112,9 +113,14 @@ double Specimen::fitness(Fitness solution)
 
 string Specimen::getGenes()
 {
+	string temp(genes);
+	return temp;
+}
+
+string Specimen::getGenes(int i)
+{
 	string temp="";
-	for (int i = 0; i<genesLength; i++)
-		temp += genes[i];
+	temp += genes[i];
 	return temp;
 }
 

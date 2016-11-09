@@ -15,6 +15,7 @@ class Population
 
 	public: 
 		int populationSize;
+
 		void setPopulation(int popSize);
 		Population(int size, bool init);
 		Specimen getSpecimen(int index);

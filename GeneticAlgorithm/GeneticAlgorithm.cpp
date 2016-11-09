@@ -7,6 +7,8 @@
 #include <sstream>
 #include <cstdio>
 #include <ctime>
+#include <conio.h>
+
 #include <opencv\cv.h>
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
@@ -23,29 +25,28 @@
 using namespace cv;
 using namespace std;
 
-Mat img; Mat templ; Mat result;
-char* image_window = "Source Image";
-char* result_window = "Result window";
-
-int match_method;
-int max_Trackbar = 5;
-
 int main(int argc, char** argv)
 {
 	srand(time(NULL));
 
-	Population test(50, true);
+	Population test(10, true);
 	Fitness solution;
 	Evolve evolvePop(test, solution, ELITES_NUMBER);
 	int generationsCount = 0;
 
-	for (int i = 0;i < 20;i++, generationsCount++)
+	bool cont = true;
+
+	for (int i = 0;test.getFittest(solution).fitness(solution)<50 && !_kbhit();i++, generationsCount++)
 	{
 		evolvePop.EvolvePop();
-		if (generationsCount % (50 / 50) == 0)
-			printf("#%i Fitness: %f\n", generationsCount, test.getFittest(solution).fitness(solution));
-	}
 
+		if (generationsCount % (50 / test.populationSize) == 0)
+			printf("#%i Fitness: %f%c\n", generationsCount, test.getFittest(solution).fitness(solution), '%');
+
+		if (test.getFittest(solution).fitness(solution) >= 30 && test.populationSize == POPULATION_SIZE)
+			test.setPopulation(50);
+
+	}
 
 	Mat temp = test.getFittest(solution).image;
 
@@ -53,13 +54,17 @@ int main(int argc, char** argv)
 	dupa += to_string(test.getFittest(solution).fitness(solution));
 	dupa += "%";
 	const char* ptr = dupa.c_str();
-	cout << ptr;
+	cout << ptr << endl;
 
-	putText(temp, ptr, cvPoint(30, 30),
-		FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200, 200, 250), 1, CV_AA);
+	cout << "Time spent on add: " << evolvePop.timeSort << "s" << endl;
+	//cout << "Time spent on filling: " << evolvePop.timeFill << "s" << endl;
+	cout << "Time spent on crossing: " << evolvePop.timeCross << "s" << endl;
+	cout << "Time spent on mutation: " << evolvePop.timeMutate << "s" << endl;
+
+	putText(temp, ptr, cvPoint(30, 30),	FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200, 200, 250), 1, CV_AA);
 	imshow("Image", temp);
 
-	waitKey(0);
+	waitKey(1);
 	cin.get();
 	return 0;
 }
