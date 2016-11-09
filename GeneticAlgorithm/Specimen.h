@@ -2,7 +2,7 @@
 #define SPECIMEN_H
 #ifdef SPECIMEN_H
 
-#define SOLUTION_LENGTH 2515 
+#define SOLUTION_LENGTH 2524 
 
 #include <string>
 #include <cstdlib>
@@ -33,7 +33,7 @@ class Specimen
 
 void Specimen::showCircle(char genes[])
 {
-	int circlesNum = (SOLUTION_LENGTH-24) / 47;
+	int circlesNum = (SOLUTION_LENGTH-24) / 50;
 	int currentGene = 0;
 
 	string temp = "";
@@ -63,7 +63,7 @@ void Specimen::showCircle(char genes[])
 		int coordY = BinToDec(temp);
 		temp = "";
 
-		for (int i = 0;i < 5;i++, currentGene++)
+		for (int i = 0;i < 8;i++, currentGene++)
 			temp += genes[currentGene];
 		int radius = BinToDec(temp);
 		temp = "";

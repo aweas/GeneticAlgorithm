@@ -20,14 +20,14 @@
 
 #define POPULATION_SIZE 10
 #define ELITES_NUMBER 3
-#define SOLUTION_LENGTH 2515
+#define SOLUTION_LENGTH 2524
 
 using namespace cv;
 using namespace std;
 
 int main(int argc, char** argv)
 {
-	srand(time(NULL));
+	srand(493);
 
 	Population test(10, true);
 	Fitness solution;
@@ -35,17 +35,27 @@ int main(int argc, char** argv)
 	int generationsCount = 0;
 
 	bool cont = true;
+	int last=0;
 
 	for (int i = 0;test.getFittest(solution).fitness(solution)<50 && !_kbhit();i++, generationsCount++)
 	{
+		int fitness = test.getFittest(solution).fitness(solution);
 		evolvePop.EvolvePop();
 
 		if (generationsCount % (50 / test.populationSize) == 0)
 			printf("#%i Fitness: %f%c\n", generationsCount, test.getFittest(solution).fitness(solution), '%');
 
-		if (test.getFittest(solution).fitness(solution) >= 30 && test.populationSize == POPULATION_SIZE)
+		if (fitness >= 30 && test.populationSize == POPULATION_SIZE)
 			test.setPopulation(50);
+	
+		if (fitness>last)
+		{
+			Mat temp = test.getFittest(solution).image;
+			string name = "Similarity"+ to_string(fitness)+".jpg";
 
+			imwrite(name.c_str(), temp);
+			last = fitness + 5;
+		}
 	}
 
 	Mat temp = test.getFittest(solution).image;
