@@ -6,113 +6,154 @@
 #include <iostream>
 #include <cstdio>
 #include <ctime>
+#include <opencv\cv.h>
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui.hpp>
+#include "opencv2/core/core.hpp"
+#include "opencv2/features2d/features2d.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/nonfree/features2d.hpp"
 
 #define POPULATION_SIZE 10
 #define ELITES_NUMBER 3
-#define SOLUTION_LENGTH 901030
+#define SOLUTION_LENGTH 30000
+using namespace cv;
+using namespace std;
 
-string generateGenes();
-string decToBin(int num);
+void showCircle(Mat img, char genes[]);
+void compareResult(Mat image);
+int BinToDec(string number);
 
-int main()
+Mat img; Mat templ; Mat result;
+char* image_window = "Source Image";
+char* result_window = "Result window";
+
+int match_method;
+int max_Trackbar = 5;
+
+int main(int argc, char** argv)
 {
-	int i;
-	FILE* f = fopen("C:\\Users\\wwydm\\Desktop\\Bez tytu³u.bmp", "rb");
-	FILE* o = fopen("C:\\Users\\wwydm\\Desktop\\test.bmp", "wb");
-	unsigned char info[54];
 
-	fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header									   
-	int width = *(int*)&info[18];			// extract image height and width from header
-	int height = *(int*)&info[22];
-	int size = 3 * width * height;
-	fclose(f);
+	// Create black empty images
+	Mat image = Mat::zeros(511, 511, CV_8UC3);
 
-	
+	// Draw a circle 
+	//circle(image, Point(200, 200), 32.0, Scalar(0, 0, 255), -1, 8);
+	showCircle(image, "110001100110101110");
 
-	//char* newbuf = new char[size];
-
-	//long bufpos = 0;
-
-	//for (int y = 0; y < height; y++)
-	//	for (int x = 0; x < 3 * width; x += 3)
-	//	{
-	//		bufpos = y * 3 * width + x;     // position in original buffer
-	//		newbuf[bufpos] = rand() % 255;       // swap r and b
-	//		newbuf[bufpos + 1] = rand() % 255; // g stays
-	//		newbuf[bufpos + 2] = rand() % 255;     // swap b and r
-	//	}
-
-	//fwrite(info, sizeof(char),54,o);
-	//fwrite(newbuf, sizeof(char), size, o);
-	//cin.get();
-	srand(time(NULL));
-
-	int generationsCount = 0;
-	Fitness * solution;
-	Population * test;
-	Evolve * evolution;
-	std::clock_t start;
-
-
-	solution = new Fitness(generateGenes());
-	test = new Population(POPULATION_SIZE, true);
-	evolution = new Evolve(*test, *solution, ELITES_NUMBER);
-
-	printf("Elites: %i, Population: %i\n", ELITES_NUMBER, POPULATION_SIZE);
-	start = clock();
-
-	for (generationsCount; (*test).getFittest(*solution).fitness(*solution) != (*solution).solutionLength ; generationsCount++)
-	{
-		(*evolution).EvolvePop();
-		if(generationsCount% (50/(*test).populationSize)==0)
-			printf("#%i Fitness: %i\n", generationsCount, (*test).getFittest(*solution).fitness(*solution));
-		if ((*test).getFittest(*solution).fitness(*solution) >= (0.95*SOLUTION_LENGTH) && (*test).populationSize == POPULATION_SIZE)
-			(*test).setPopulation(50);
-
-	}
-
-	double timer = (clock() - start) / (double)CLOCKS_PER_SEC;
-
-	printf("\nSolution found in %i generations\nTime: %5.3f seconds", generationsCount-1,timer);
-	cin.get();
+	imshow("Image", image);
+	compareResult(image);
+	waitKey(0);
+	return 0;
 }
 
-string generateGenes()
+void showCircle(Mat img, char genes[])
 {
-	string solutionGenes;
-	FILE* f = fopen("C:\\Users\\wwydm\\Desktop\\Bez tytu³u.bmp", "rb");
-	unsigned char info[54];
-	fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
+	int currentGene=0;
+	string numX;
+	string numY;
 
-	int width = *(int*)&info[18];			// extract image height and width from header
-	int height = *(int*)&info[22];
+	for (int i=0;i < 9;i++, currentGene++)
+		numX += genes[currentGene];
+	for (int i = 0;i < 9;i++, currentGene++)
+		numY += genes[currentGene];
 
-	int size = 3 * width * height;
-	unsigned char* data = new unsigned char[size]; // allocate 3 bytes per pixel
-	fread(data, sizeof(unsigned char), size, f); // read the rest of the data at once
-	fclose(f);
-
-	for (int i = 0; i < size; i += 3)
-	{
-		unsigned char tmp = data[i];
-		data[i] = data[i + 2];
-		data[i + 2] = tmp;
-
-		solutionGenes += decToBin(data[i]);
-		solutionGenes += decToBin(data[i + 1]);
-		solutionGenes += decToBin(data[i + 2]);
-	}
-
-	return solutionGenes;
+	int coordX = BinToDec(numX);
+	int coordY = BinToDec(numY);
+	cout << coordX << " : " << coordY << endl;
+	circle(img, Point(coordX, coordY), 32.0, Scalar(0, 0, 255), -1, 8);
 }
 
-string decToBin(int number)
+int BinToDec(string number)
 {
-	if (number == 0) return "0";
-	if (number == 1) return "1";
+	int result = 0, pow = 1;
+	for (int i = number.length() - 1; i >= 0; --i, pow <<= 1)
+		result += (number[i] - '0') * pow;
 
-	if (number % 2 == 0)
-		return decToBin(number / 2) + "0";
-	else
-		return decToBin(number / 2) + "1";
+	return result;
+}
+
+void compareResult(Mat image)
+{
+	/*				WORKING IMAGE COMPARISION		*/
+	Mat src_base, hsv_base;
+	Mat src_test1, hsv_test1;
+	Mat src_test2, hsv_test2;
+	Mat hsv_half_down;
+
+	/// Load three images with different environment settings
+
+	src_base = imread("asdf.jpg", 1);
+	src_test1 = image;
+	src_test2 = imread("templ3.bmp", 1);
+
+	if (!src_base.data || !src_test1.data)
+	{
+		cout << "No image found, or not opened .exe directly";
+		cin.get();
+	}
+	/// Convert to HSV
+	cvtColor(src_base, hsv_base, COLOR_BGR2HSV);
+	cvtColor(src_test1, hsv_test1, COLOR_BGR2HSV);
+	cvtColor(src_test2, hsv_test2, COLOR_BGR2HSV);
+
+	hsv_half_down = hsv_base(Range(hsv_base.rows / 2, hsv_base.rows - 1), Range(0, hsv_base.cols - 1));
+
+	/// Using 50 bins for hue and 60 for saturation
+	int h_bins = 50; int s_bins = 60;
+	int histSize[] = { h_bins, s_bins };
+
+	// hue varies from 0 to 179, saturation from 0 to 255
+	float h_ranges[] = { 0, 180 };
+	float s_ranges[] = { 0, 256 };
+
+	const float* ranges[] = { h_ranges, s_ranges };
+
+	// Use the o-th and 1-st channels
+	int channels[] = { 0, 1 };
+
+
+	/// Histograms
+	MatND hist_base;
+	MatND hist_half_down;
+	MatND hist_test1;
+	MatND hist_test2;
+
+	/// Calculate the histograms for the HSV images
+	calcHist(&hsv_base, 1, channels, Mat(), hist_base, 2, histSize, ranges, true, false);
+	normalize(hist_base, hist_base, 0, 1, NORM_MINMAX, -1, Mat());
+
+	calcHist(&hsv_half_down, 1, channels, Mat(), hist_half_down, 2, histSize, ranges, true, false);
+	normalize(hist_half_down, hist_half_down, 0, 1, NORM_MINMAX, -1, Mat());
+
+	calcHist(&hsv_test1, 1, channels, Mat(), hist_test1, 2, histSize, ranges, true, false);
+	normalize(hist_test1, hist_test1, 0, 1, NORM_MINMAX, -1, Mat());
+
+	calcHist(&hsv_test2, 1, channels, Mat(), hist_test2, 2, histSize, ranges, true, false);
+	normalize(hist_test2, hist_test2, 0, 1, NORM_MINMAX, -1, Mat());
+
+	double max_base_value[4] = { 1,1000,46.739756, 1 };
+	double test1_sum = 0;
+	/// Apply the histogram comparison methods
+	for (int i = 0; i < 4; i++)
+	{
+		int compare_method = i;
+		double base_base = compareHist(hist_base, hist_base, compare_method);
+		double base_half = compareHist(hist_base, hist_half_down, compare_method);
+		double base_test1 = compareHist(hist_base, hist_test1, compare_method);
+		double base_test2 = compareHist(hist_base, hist_test2, compare_method);
+
+		if (i == 0)
+			test1_sum += base_test1 / max_base_value[i] * 100;
+		else if (i == 2)
+			test1_sum += base_test1 / max_base_value[i] * 100;
+		else if (i == 3)
+			test1_sum += (1 - base_test1) / max_base_value[i] * 100;
+
+		printf(" Method [%d] Perfect, Base-Half, Base-Test(1), Base-Test(2) : %f, %f, %f, %f\n", i, base_base, base_half, base_test1, base_test2);
+	}
+	printf("Similarity: %f %c\n", test1_sum / 3, '%');
+
+	printf("Done \n");
 }

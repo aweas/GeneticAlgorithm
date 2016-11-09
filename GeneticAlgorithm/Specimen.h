@@ -2,7 +2,7 @@
 #define SPECIMEN_H
 #ifdef SPECIMEN_H
 
-#define SOLUTION_LENGTH 901030 
+#define SOLUTION_LENGTH 30000 
 
 #include <string>
 #include <cstdlib>
@@ -19,7 +19,7 @@ class Specimen
 		int fit=-1;
 
 	public:
-		int genesLength = SOLUTION_LENGTH;
+		double genesLength = SOLUTION_LENGTH;
 		void generate();
 		int fitness(Fitness solution);
 		string getGenes();
