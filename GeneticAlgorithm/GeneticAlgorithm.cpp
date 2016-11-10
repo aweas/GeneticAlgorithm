@@ -27,7 +27,7 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	srand(493);
+	srand(time(NULL));
 
 	Population test(10, true);
 	Fitness solution;
@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 	bool cont = true;
 	int last=0;
 
-	for (int i = 0;test.getFittest(solution).fitness(solution)<50 && !_kbhit();i++, generationsCount++)
+	for (int i = 0;test.getFittest(solution).fitness(solution)<95 && !_kbhit();i++, generationsCount++)
 	{
 		int fitness = test.getFittest(solution).fitness(solution);
 		evolvePop.EvolvePop();
