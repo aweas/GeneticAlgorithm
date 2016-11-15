@@ -2,7 +2,7 @@
 #define SPECIMEN_H
 #ifdef SPECIMEN_H
 
-#define SOLUTION_LENGTH 2524 
+#define SOLUTION_LENGTH 911 
 
 #include <string>
 #include <cstdlib>
@@ -20,6 +20,7 @@ class Specimen
 		double fit=-1;
 
 	public:
+		double similarity[3];
 		double genesLength = SOLUTION_LENGTH;
 		void generate();
 		double fitness(Fitness solution);
@@ -33,55 +34,59 @@ class Specimen
 
 void Specimen::showCircle(char genes[])
 {
-	int circlesNum = (SOLUTION_LENGTH-24) / 50;
 	int currentGene = 0;
 
 	string temp = "";
-	for (int i = 0;i < 8;i++, currentGene++)
+	for (int i = 0;i < 2;i++, currentGene++)
 		temp += genes[currentGene];
-	int R = BinToDec(temp);
-	temp = "";
-	for (int i = 0;i < 8;i++, currentGene++)
-		temp += genes[currentGene];
-	int G = BinToDec(temp);
-	temp = "";
-	for (int i = 0;i < 8;i++, currentGene++)
-		temp += genes[currentGene];
-	int B= BinToDec(temp);
+	int circlesNum = atoi(temp.c_str());
 	temp = "";
 
-	image.setTo(cv::Scalar(R, G, B));
+	for (int i = 0;i < 3;i++, currentGene++)
+		temp += genes[currentGene];
+	int R = atoi(temp.c_str());
+	temp = "";
+	for (int i = 0;i < 3;i++, currentGene++)
+		temp += genes[currentGene];
+	int G = atoi(temp.c_str());
+	temp = "";
+	for (int i = 0;i < 3;i++, currentGene++)
+		temp += genes[currentGene];
+	int B= atoi(temp.c_str());
+	temp = "";
+	//cout << R << " "<< G << " " << B << endl;
+	image.setTo(cv::Scalar(0, G, B));
 	for (int j = 0;j < circlesNum;j++)
 	{
-		for (int i = 0;i < 9;i++, currentGene++)
+		for (int i = 0;i < 3;i++, currentGene++)
 			temp += genes[currentGene];
-		int coordX = BinToDec(temp);
+		int coordX = atoi(temp.c_str());
 		temp = "";
 
-		for (int i = 0;i < 9;i++, currentGene++)
+		for (int i = 0;i < 3;i++, currentGene++)
 			temp += genes[currentGene];
-		int coordY = BinToDec(temp);
+		int coordY = atoi(temp.c_str());
 		temp = "";
 
-		for (int i = 0;i < 8;i++, currentGene++)
+		for (int i = 0;i < 3;i++, currentGene++)
 			temp += genes[currentGene];
-		int radius = BinToDec(temp);
+		int radius = atoi(temp.c_str());
 		temp = "";
 
-		for (int i = 0;i < 8;i++, currentGene++)
+		for (int i = 0;i < 3;i++, currentGene++)
 			temp += genes[currentGene];
-		int R = BinToDec(temp);
+		int R = atoi(temp.c_str());
 		temp = "";
-		for (int i = 0;i < 8;i++, currentGene++)
+		for (int i = 0;i < 3;i++, currentGene++)
 			temp += genes[currentGene];
-		int G = BinToDec(temp);
+		int G = atoi(temp.c_str());
 		temp = "";
-		for (int i = 0;i < 8;i++, currentGene++)
+		for (int i = 0;i < 3;i++, currentGene++)
 			temp += genes[currentGene];
-		int B = BinToDec(temp);
+		int B = atoi(temp.c_str());
 		temp = "";
 
-		//cout << coordX << " : " << coordY << "   " << radius << endl;
+		//cout << coordX << " : " << coordY << "   " << radius << " "<< circlesNum<<endl;
 
 		circle(image, Point(coordX, coordY), radius, Scalar(R, G, B), -1, 8);
 	}
@@ -90,12 +95,55 @@ void Specimen::showCircle(char genes[])
 
 void Specimen::generate()
 {
-	for (int i = 0;i < genesLength;i++)
+	int geneNum=2;
+	int temp = rand() % 51;
+	genes[0] = temp / 10 + 48;
+	genes[1] = temp % 10 + 48;
+
+	for (int i = 0;i < 3;i++, geneNum+=3)
 	{
-		if (rand() % 2 == 0)
-			genes[i] = '0';
-		else
-			genes[i] = '1';
+		int temp = rand() % 256;
+		genes[geneNum] = temp / 100 + 48;
+		genes[geneNum+1] = (temp / 10)%10 + 48;
+		genes[geneNum + 2] = temp % 10 + 48;
+	}
+	for (int i = 0; i < 50; i++)
+	{
+		//X and Y coordinates
+		int temp = rand() % 512;
+		genes[geneNum] = temp / 100 + 48;
+		genes[geneNum + 1] = (temp / 10) % 10 + 48;
+		genes[geneNum + 2] = temp % 10 + 48;
+		geneNum += 3;
+		temp = rand() % 512;
+		genes[geneNum] = temp / 100 + 48;
+		genes[geneNum + 1] = (temp / 10) % 10 + 48;
+		genes[geneNum + 2] = temp % 10 + 48;
+		geneNum += 3;
+
+		//Radius
+		temp = rand() % 128;
+		genes[geneNum] = temp / 100 + 48;
+		genes[geneNum + 1] = (temp / 10) % 10 + 48;
+		genes[geneNum + 2] = temp % 10 + 48;
+		geneNum += 3;
+
+		//Color
+		temp = rand() % 256;
+		genes[geneNum] = temp / 100 + 48;
+		genes[geneNum + 1] = (temp / 10) % 10 + 48;
+		genes[geneNum + 2] = temp % 10 + 48;
+		geneNum += 3;
+		temp = rand() % 256;
+		genes[geneNum] = temp / 100 + 48;
+		genes[geneNum + 1] = (temp / 10) % 10 + 48;
+		genes[geneNum + 2] = temp % 10 + 48;
+		geneNum += 3;
+		temp = rand() % 256;
+		genes[geneNum] = temp / 100 + 48;
+		genes[geneNum + 1] = (temp / 10) % 10 + 48;
+		genes[geneNum + 2] = temp % 10 + 48;
+		geneNum += 3;
 	}
 }
 
@@ -103,9 +151,16 @@ double Specimen::fitness(Fitness solution)
 {
 	if (fit == -1)
 	{
+		double sum = 0;
 		image = Mat::zeros(511, 511, CV_8UC3);
 		showCircle(genes);
-		fit = solution.getFitness(image);
+
+		similarity[0] = solution.getSim(1, image);
+		similarity[1] = solution.getSim(2, image);
+		similarity[2] = solution.getSim(4, image);
+		
+		sum = similarity[0] + similarity[1] + similarity[2];
+		fit = sum / 3;
 	}
 
 	return fit;

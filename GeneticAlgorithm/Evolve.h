@@ -3,7 +3,7 @@
 #ifdef EVOLVE_H
 #include "Population.h"
 
-#define MUTATION_RATE 50
+#define MUTATION_RATE 15
 
 class Evolve
 {
@@ -16,7 +16,8 @@ class Evolve
 		Specimen select();
 		void mutate(int index);
 		int elite = 5;
-
+		string intToString(int num);
+		string randomNum(int max, char hun, char dec, char one);
 	public:
 		double timeSort;
 		double timeFill;
@@ -83,12 +84,8 @@ Specimen Evolve::select()
 	static int max = (*population).populationSize;
 	for (int i = 0;i < 2;i++)
 	{
-		int pick = rand() % max;
-
-		
+		int pick = rand() % max;		
 		string genes = (*population).getSpecimen(pick).getGenes();
-		
-
 		tournament.addSpecimen(genes, i);
 	}
 	
@@ -97,14 +94,14 @@ Specimen Evolve::select()
 
 void Evolve::crossover()
 {
-	std::clock_t sortClock;
-	Specimen father = select();
 	
-	static int max = father.getGenes().length();
-	static int maxPop = (*population).populationSize;
+	Specimen father = (*population).getSpecimen(0);
+
+	int max = father.getGenes().length();
+	int maxPop = (*population).populationSize;
+	
 	for (int j = 1;j < maxPop; j++)
 	{
-		
 		Specimen father = select();
 		Specimen mother = select();
 		string genes;
@@ -117,10 +114,6 @@ void Evolve::crossover()
 		}
 		
 		(*population).addSpecimen(genes, j);	
-
-		sortClock = clock();
-		//int fit = (*population).getSpecimen(j).fitness(*solution);
-		timeSort += (clock() - sortClock) / (double)CLOCKS_PER_SEC;
 	}
 }
 
@@ -129,49 +122,107 @@ void Evolve::mutate(int index)
 	string newGenes;
 	string oldGenes = (*population).getSpecimen(index).getGenes();
 
-	static int max = (*population).getSpecimen(index).genesLength;
-	for (int i = 0; i < max; i++)
+	int max = (*population).getSpecimen(index).genesLength;
+	int geneNum = 2;
+	newGenes += randomNum(50, oldGenes[0], oldGenes[0], oldGenes[1]);
+
+	for (int j = 0;j < 3;j++)
 	{
-		if (rand() % 1000 <= MUTATION_RATE)
-		{
-			if (rand() % 2 == 0)
-				newGenes += '0';
-			else
-				newGenes += '1';
-		}
-		else
-			newGenes += oldGenes[i];
+		//RGB
+		//cout << newGenes << endl;
+		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum+1], oldGenes[geneNum+2]);
+		geneNum += 3;
 	}
+	
+	for (int j = 0;j < 50;j++)
+	{
+		//Coords X and Y
+		newGenes += randomNum(511, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+		newGenes += randomNum(511, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+		//Radius
+		newGenes += randomNum(127, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+		//Color
+		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+	}
+	
+		//if (rand() % 1000 <= MUTATION_RATE)
+		//{
+		//	if (rand() % 2 == 0)
+		//		newGenes += '0';
+		//	else
+		//		newGenes += '1';
+		//}
+		//else
+		//	newGenes += oldGenes[i];
 
 	(*population).addSpecimen(newGenes, index);
 }
 
 void Evolve::EvolvePop()
 {
-	std::clock_t sortClock;
-	std::clock_t fillClock;
-	std::clock_t crossClock;
-	std::clock_t mutateClock;
-
-	sortClock = clock();
 	sort();
-	timeSort+= (clock() - sortClock) / (double)CLOCKS_PER_SEC;
-
-	fillClock = clock();
 	fill();
-	timeFill += (clock() - fillClock) / (double)CLOCKS_PER_SEC;
-
-	crossClock = clock();
 	crossover();
-	timeCross += (clock() - crossClock) / (double)CLOCKS_PER_SEC;
+	
+	int max = (*population).populationSize;
 
-	sortClock = clock();
-	static int max = (*population).populationSize;
 	for(int i=1;i<max;i++)
 		mutate(i);
-	timeMutate += (clock() - sortClock) / (double)CLOCKS_PER_SEC;
 }
 
+string Evolve::intToString(int num)
+{
+	char a = num + 48;
+	string temp(1, a);
+	return temp;
+}
 
+string Evolve::randomNum(int max, char hunD, char decD, char oneD)
+{
+	string newGenes = "";
+	int i = 0;
+	int hun = max / 100;
+	int dec = (max / 10) % 10;
+	int one = max % 10;
 
+	if (max >= 100)
+	{
+		if (rand() % 1000 <= MUTATION_RATE)
+			newGenes += intToString(rand() % hun);
+		else
+			newGenes += hunD;
+		i++;
+	}
+
+	if (rand() % 1000 <= MUTATION_RATE)
+	{
+		if (newGenes[i - 1] != intToString(hun)[0])
+			newGenes += intToString(rand() % 9);
+		else
+			newGenes += intToString(rand() % (dec+1));
+	}
+	else
+		newGenes += decD;
+	i++;
+
+	if (rand() % 1000 <= MUTATION_RATE)
+	{
+		if (newGenes[i - 2] != intToString(hun)[0] && newGenes[i - 1] != intToString(dec)[0])
+			newGenes += intToString(rand() % 9);
+		else
+			newGenes += intToString(rand() % (one + 1));
+	}
+	else
+		newGenes += oneD;
+
+	return newGenes;
+}
 #endif

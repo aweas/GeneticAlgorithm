@@ -19,80 +19,116 @@ class Fitness
 {
 	private:
 		string solution;
-
+		
 	public:
 		int solutionLength;
 		double getFitness(Mat image);
+		double getSim(int method, Mat image);
 };
+
+double Fitness::getSim(int method, Mat image)
+{
+	Mat source, test;
+	
+	source = imread("asdf.jpg", -1);
+	resize(image, test, source.size());
+	//test = imread("czarny.jpg", 1);
+
+	if (!source.data || !test.data)
+	{
+		cout << "No image found, or you did not open .exe directly";
+		cin.get();
+	}
+	
+	double result = 100 - (norm(source, test, method) / (double)(source.rows*test.cols));
+	return result;
+}
 
 double Fitness::getFitness(Mat image)
 {
 	/*				WORKING IMAGE COMPARISION		*/
 	Mat src_base, hsv_base;
 	Mat src_test1, hsv_test1;
-	Mat src_test2, hsv_test2;
-	Mat hsv_half_down;
-
-	/// Load three images with different environment settings
 
 	src_base = imread("asdf.jpg", 1);
-	src_test1 = image;
+	//resize(image, src_test1, src_base.size());
+	src_test1 = imread("kropki.jpg", 1);
 
 	if (!src_base.data || !src_test1.data)
 	{
-		cout << "No image found, or not opened .exe directly";
+		cout << "No image found, or you did not open .exe directly";
 		cin.get();
 	}
 
 	/// Convert to HSV
-	cvtColor(src_base, hsv_base, COLOR_BGR2HSV);
-	cvtColor(src_test1, hsv_test1, COLOR_BGR2HSV);
+	//cvtColor(src_base, hsv_base, COLOR_BGR2HSV);
+	//cvtColor(src_test1, hsv_test1, COLOR_BGR2HSV);
 
-	/// Using 50 bins for hue and 60 for saturation
-	int h_bins = 50; int s_bins = 60;
-	int histSize[] = { h_bins, s_bins };
+	///// Using 50 bins for hue and 60 for saturation
+	//int h_bins = 50; int s_bins = 60;
+	//int histSize[] = { h_bins, s_bins };
 
-	// hue varies from 0 to 179, saturation from 0 to 255
-	float h_ranges[] = { 0, 180 };
-	float s_ranges[] = { 0, 256 };
+	//// hue varies from 0 to 179, saturation from 0 to 255
+	//float h_ranges[] = { 0, 180 };
+	//float s_ranges[] = { 0, 256 };
 
-	const float* ranges[] = { h_ranges, s_ranges };
+	//const float* ranges[] = { h_ranges, s_ranges };
 
-	// Use the o-th and 1-st channels
-	int channels[] = { 0, 1 };
+	//// Use the o-th and 1-st channels
+	//int channels[] = { 0, 1 };
 
-	/// Histograms
-	MatND hist_base;
-	MatND hist_test1;
+	///// Histograms
+	//MatND hist_base;
+	//MatND hist_test1;
 
-	/// Calculate the histograms for the HSV images
-	calcHist(&hsv_base, 1, channels, Mat(), hist_base, 2, histSize, ranges, true, false);
-	normalize(hist_base, hist_base, 0, 1, NORM_MINMAX, -1, Mat());
+	///// Calculate the histograms for the HSV images
+	//calcHist(&hsv_base, 1, channels, Mat(), hist_base, 2, histSize, ranges, true, false);
+	//normalize(hist_base, hist_base, 0, 1, NORM_MINMAX, -1, Mat());
 
-	calcHist(&hsv_test1, 1, channels, Mat(), hist_test1, 2, histSize, ranges, true, false);
-	normalize(hist_test1, hist_test1, 0, 1, NORM_MINMAX, -1, Mat());
+	//calcHist(&hsv_test1, 1, channels, Mat(), hist_test1, 2, histSize, ranges, true, false);
+	//normalize(hist_test1, hist_test1, 0, 1, NORM_MINMAX, -1, Mat());
 
-	double max_base_value[4] = { 1,1000,46.739756, 1 };
+	//double max_base_value[4] = { 1,1000,46.739756, 1 };
 	double test1_sum = 0;
 
 	/// Apply the histogram comparison methods
-	for (int i = 0; i < 4; i++)
-	{
-		int compare_method = i;
-		double base_base = compareHist(hist_base, hist_base, compare_method);
-		double base_test1 = compareHist(hist_base, hist_test1, compare_method);
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	//int compare_method = i;
+	//	//double base_base = compareHist(hist_base, hist_base, compare_method);
+	//	//double base_test1 = compareHist(hist_base, hist_test1, compare_method);
 
-		if (i == 0)
-			test1_sum += base_test1 / max_base_value[i] * 100;
-		else if (i == 2)
-			test1_sum += base_test1 / max_base_value[i] * 100;
-		else if (i == 3)
-			test1_sum += (1 - base_test1) / max_base_value[i] * 100;
-	}
+	//	//switch (i)
+	//	//{
+	//	//case 0:
+	//	//	//test1_sum += base_test1 / base_base * 100 * 2;
+	//	//	//cout << "Algorithm " << i << ": " << base_test1 / base_base * 100<<endl;
+	//	//	break;
+	//	//case 1:
+	//	//	//test1_sum += (1000 - base_test1) / (1000 - base_base) * 100;
+	//	//	//cout << "Algorithm " << i << ": " << (1000 - base_test1) / (1000 - base_base) * 100 << endl;
+	//	//	break;
+	//	//case 2:
+	//	//	//test1_sum += base_test1 / max_base_value[i] * 100;
+	//	//	//cout << "Algorithm " << i << ": " << base_test1 / base_base * 100 << endl;
+	//	//	break;
+	//	//case 3:
+	//	//	//test1_sum += ((1 - base_test1) / (1 - base_base)) * 100;
+	//	//	//cout << "Algorithm " << i << ": " << ((1 - base_test1) / (1 - base_base)) * 100 << endl;
+	//	//	break;
+	//	//}
+	//}
 	//printf("Similarity: %f %c\n", test1_sum / 3, '%');
+	test1_sum += 100 - norm(src_base, src_test1, 1) / (src_base.rows*src_base.cols);
+	cout << "Algorithm " << 1 << ": " << 100 - norm(src_base, src_test1, 1) / (src_base.rows*src_base.cols) << "%" << endl;
 
+	test1_sum += 100 - norm(src_base, src_test1, 2) / (src_base.rows*src_base.cols);
+	cout << "Algorithm " << 2 << ": " << 100 - norm(src_base, src_test1, 2) / (src_base.rows*src_base.cols) << "%" << endl;
+
+	test1_sum += 100 - norm(src_base, src_test1, 4) / (src_base.rows*src_base.cols);
+	cout << "Algorithm " << 4 << ": " << 100 - norm(src_base, src_test1, 4) / (src_base.rows*src_base.cols) << "%" << endl;
 	//imshow("Image", image);
-
+	//cout << norm(src_base, image) << endl;
 	return test1_sum/3;
 }
 #endif
