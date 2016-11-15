@@ -28,20 +28,41 @@ class Fitness
 
 double Fitness::getSim(int method, Mat image)
 {
-	Mat source, test;
-	
-	source = imread("asdf.jpg", -1);
-	resize(image, test, source.size());
-	//test = imread("czarny.jpg", 1);
+	Mat source, test, temp;
+	double PSNR = 100;
 
-	if (!source.data || !test.data)
-	{
-		cout << "No image found, or you did not open .exe directly";
-		cin.get();
-	}
+	source = imread("asdf.jpg", 1);
+	resize(image, test, source.size());
+	/*test = imread("zielony_mur.jpg", 1);
+	resize(test, test, source.size());*/
+
+	absdiff(source, test, temp);
+	temp.convertTo(temp, CV_32F);
+	temp = temp.mul(temp);
+
+	Scalar summary = sum(temp);
+	double channelSum = summary.val[0] + summary.val[1] + summary.val[2];
+
+	if (channelSum <= 1e-10)
+		return 0;
 	
-	double result = 100 - (norm(source, test, method) / (double)(source.rows*test.cols));
-	return result;
+	double MSE = channelSum / (double)(source.channels()*source.total());
+
+	if(MSE != 0)
+		 PSNR = 10.0 * log10((255 * 255)/ MSE);
+	else
+		cout << MSE << endl;
+
+	return PSNR;
+
+	//if (!source.data || !test.data)
+	//{
+	//	cout << "No image found, or you did not open .exe directly";
+	//	cin.get();
+	//}
+	//
+	//double result = 100 - (norm(source, test, method) / (double)(source.rows*test.cols));
+	//return result;
 }
 
 double Fitness::getFitness(Mat image)

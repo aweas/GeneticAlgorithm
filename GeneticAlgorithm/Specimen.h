@@ -156,11 +156,12 @@ double Specimen::fitness(Fitness solution)
 		showCircle(genes);
 
 		similarity[0] = solution.getSim(1, image);
-		similarity[1] = solution.getSim(2, image);
-		similarity[2] = solution.getSim(4, image);
+		//similarity[1] = solution.getSim(2, image);
+		//similarity[2] = solution.getSim(4, image);
 		
-		sum = similarity[0] + similarity[1] + similarity[2];
-		fit = sum / 3;
+		//sum = similarity[0] + similarity[1] + similarity[2];
+		//fit = sum / 3;
+		fit = similarity[0];
 	}
 
 	return fit;

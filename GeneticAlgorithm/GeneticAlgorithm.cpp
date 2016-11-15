@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 {
 	srand(time(NULL));
 
-	Population test(10, true);
+	Population test(50, true);
 	Fitness solution;
 	Evolve evolvePop(test, solution, ELITES_NUMBER);
 	int generationsCount = 0;
@@ -56,16 +56,16 @@ int main(int argc, char** argv)
 			const char* ptr = simAll.c_str();
 			string simOne = "Method 1: "; simOne += to_string(test.getFittest(solution).similarity[0]); simOne += "%";
 			const char* ptr1 = simOne.c_str();
-			string simTwo = "Method 2: "; simTwo += to_string(test.getFittest(solution).similarity[1]); simTwo += "%";
-			const char* ptr2 = simTwo.c_str();
-			string simThree = "Method 3: "; simThree += to_string(test.getFittest(solution).similarity[2]); simThree += "%";
-			const char* ptr3 = simThree.c_str();
+			//string simTwo = "Method 2: "; simTwo += to_string(test.getFittest(solution).similarity[1]); simTwo += "%";
+			//const char* ptr2 = simTwo.c_str();
+			//string simThree = "Method 3: "; simThree += to_string(test.getFittest(solution).similarity[2]); simThree += "%";
+			//const char* ptr3 = simThree.c_str();
 			//cout << ptr << endl;
 
 			putText(temp, ptr, cvPoint(30, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
 			putText(temp, ptr1, cvPoint(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
-			putText(temp, ptr2, cvPoint(30, 90), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
-			putText(temp, ptr3,cvPoint(30, 120), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
+			//putText(temp, ptr2, cvPoint(30, 90), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
+			//putText(temp, ptr3,cvPoint(30, 120), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
 
 			imwrite(name.c_str(), temp);
 			last = fitness + 4;
@@ -77,16 +77,16 @@ int main(int argc, char** argv)
 	const char* ptr = dupa.c_str();
 	string simOne = "Method 1: "; simOne += to_string(test.getFittest(solution).similarity[0]); simOne += "%";
 	const char* ptr1 = simOne.c_str();
-	string simTwo = "Method 2: "; simTwo += to_string(test.getFittest(solution).similarity[1]); simTwo += "%";
-	const char* ptr2 = simTwo.c_str();
-	string simThree = "Method 3: "; simThree += to_string(test.getFittest(solution).similarity[2]); simThree += "%";
-	const char* ptr3 = simThree.c_str();
+	//string simTwo = "Method 2: "; simTwo += to_string(test.getFittest(solution).similarity[1]); simTwo += "%";
+	//const char* ptr2 = simTwo.c_str();
+	//string simThree = "Method 3: "; simThree += to_string(test.getFittest(solution).similarity[2]); simThree += "%";
+	//const char* ptr3 = simThree.c_str();
 	cout << ptr << endl;
 
 	putText(temp, ptr, cvPoint(30, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
 	putText(temp, ptr1, cvPoint(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
-	putText(temp, ptr2, cvPoint(30, 90), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
-	putText(temp, ptr3, cvPoint(30, 120), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
+	//putText(temp, ptr2, cvPoint(30, 90), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
+	//putText(temp, ptr3, cvPoint(30, 120), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
 
 	imshow("Image", temp);
 
