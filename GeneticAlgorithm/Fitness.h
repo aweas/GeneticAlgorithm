@@ -33,10 +33,10 @@ double Fitness::getSim(int method, Mat image)
 
 	source = imread("asdf.jpg", 1);
 	resize(image, test, source.size());
-	/*test = imread("zielony_mur.jpg", 1);
-	resize(test, test, source.size());*/
+	//test = imread("Similarity62.jpg", 1);
+	//resize(test, test, source.size());
 
-	absdiff(source, test, temp);
+	/*absdiff(source, test, temp);
 	temp.convertTo(temp, CV_32F);
 	temp = temp.mul(temp);
 
@@ -51,18 +51,18 @@ double Fitness::getSim(int method, Mat image)
 	if(MSE != 0)
 		 PSNR = 10.0 * log10((255 * 255)/ MSE);
 	else
-		cout << MSE << endl;
+		cout << MSE << endl;*/
 
-	return PSNR;
+	//return PSNR;
 
-	//if (!source.data || !test.data)
-	//{
-	//	cout << "No image found, or you did not open .exe directly";
-	//	cin.get();
-	//}
-	//
-	//double result = 100 - (norm(source, test, method) / (double)(source.rows*test.cols));
-	//return result;
+	if (!source.data || !test.data)
+	{
+		cout << "No image found, or you did not open .exe directly";
+		cin.get();
+	}
+	
+	double result = (10 - (norm(source, test, 4) / (double)(source.rows*test.cols)))*10;
+	return result;
 }
 
 double Fitness::getFitness(Mat image)
