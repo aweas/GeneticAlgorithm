@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 	{
 		evolvePop.EvolvePop();
 
-		int fitness = test.getFittest(solution).fitness(solution);
+		float fitness = test.getFittest(solution).fitness(solution);
 
 		if (generationsCount % (50 / 10) == 0)
 			printf("#%i Fitness: %f%c\n", generationsCount, test.getFittest(solution).fitness(solution), '%');

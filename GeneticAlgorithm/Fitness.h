@@ -19,19 +19,24 @@ class Fitness
 {
 	private:
 		string solution;
-		
+		Mat source;
 	public:
+		Fitness();
 		int solutionLength;
 		double getFitness(Mat image);
 		double getSim(int method, Mat image);
 };
 
+Fitness::Fitness()
+{
+	source = imread("asdf.jpg", 1);
+	resize(source, source, Size(26, 26));
+}
 double Fitness::getSim(int method, Mat image)
 {
-	Mat source, test, temp;
-	double PSNR = 100;
+	Mat test, temp;
+	//double PSNR = 100;
 
-	source = imread("asdf.jpg", 1);
 	resize(image, test, source.size());
 	//test = imread("Similarity62.jpg", 1);
 	//resize(test, test, source.size());
