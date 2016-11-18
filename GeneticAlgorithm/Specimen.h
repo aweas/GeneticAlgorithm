@@ -104,9 +104,14 @@ void Specimen::showCircle(char genes[])
 void Specimen::generate()
 {
 	int geneNum=2;
-	int temp = rand() % 20;
-	genes[0] = temp / 10 + 49;
+	int temp = rand() % 50;
+	genes[0] = temp / 10 + 48;
 	genes[1] = temp % 10 + 48;
+	//char ptr[2] = { genes[0], genes[1] };
+	//cout << temp << ": ";
+	//cout << (char)(temp / 10 + 48);
+	//cout << (char)(temp % 10 + 48) << ": ";
+	//cout << atoi(ptr) << endl;
 
 	for (int i = 0;i < 3;i++, geneNum+=3)
 	{
@@ -115,7 +120,7 @@ void Specimen::generate()
 		genes[geneNum+1] = (temp / 10)%10 + 48;
 		genes[geneNum + 2] = temp % 10 + 48;
 	}
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 50; i++)
 	{
 		//X and Y coordinates
 		int temp = rand() % 26;
@@ -130,7 +135,7 @@ void Specimen::generate()
 		geneNum += 3;
 
 		//Radius
-		temp = rand() % 5;
+		temp = rand() % 6;
 		genes[geneNum] = temp / 100 + 48;
 		genes[geneNum + 1] = (temp / 10) % 10 + 48;
 		genes[geneNum + 2] = temp % 10 + 48;
@@ -153,6 +158,7 @@ void Specimen::generate()
 		genes[geneNum + 2] = temp % 10 + 48;
 		geneNum += 3;
 	}
+	//cout << sizeof(genes)/sizeof(char) << endl;
 }
 
 double Specimen::fitness(Fitness solution)

@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 	int generationsCount = 0;
 
 	bool cont = true;
-	int last=0;
+	float last=0.0;
 
 	for (int i = 0;test.getFittest(solution).fitness(solution)<100 && test.getFittest(solution).fitness(solution)>0 && !_kbhit();i++, generationsCount++)
 	{
