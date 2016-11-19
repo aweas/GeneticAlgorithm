@@ -21,7 +21,7 @@
 
 #define POPULATION_SIZE 100
 #define ELITES_NUMBER 3
-#define SOLUTION_LENGTH 902
+#define SOLUTION_LENGTH 1352
 
 using namespace cv;
 using namespace std;
