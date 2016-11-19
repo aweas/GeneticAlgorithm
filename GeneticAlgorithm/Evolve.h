@@ -139,13 +139,13 @@ void Evolve::mutate(int index)
 	for (int j = 0;j < atoi(circlesNum.c_str());j++)
 	{
 		//Coords X and Y
-		newGenes += randomNum(26, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		newGenes += randomNum(256, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
 		geneNum += 3;
-		newGenes += randomNum(26, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		newGenes += randomNum(256, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
 		geneNum += 3;
 		
 		//Radius
-		newGenes += randomNum(6, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		newGenes += randomNum(64, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
 		geneNum += 3;
 		
 		//Color
@@ -202,7 +202,7 @@ string Evolve::randomNum(int max, char hunD, char decD, char oneD, int min, stri
 			else
 				newGenes += hunD;
 		}
-		else if (max == 6 || max == 26)
+		else if (max == 64 || max == 23)
 			newGenes += "0";
 		i++;
 

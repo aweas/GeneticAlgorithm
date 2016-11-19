@@ -107,11 +107,6 @@ void Specimen::generate()
 	int temp = rand() % 50;
 	genes[0] = temp / 10 + 48;
 	genes[1] = temp % 10 + 48;
-	//char ptr[2] = { genes[0], genes[1] };
-	//cout << temp << ": ";
-	//cout << (char)(temp / 10 + 48);
-	//cout << (char)(temp % 10 + 48) << ": ";
-	//cout << atoi(ptr) << endl;
 
 	for (int i = 0;i < 3;i++, geneNum+=3)
 	{
@@ -123,19 +118,19 @@ void Specimen::generate()
 	for (int i = 0; i < 50; i++)
 	{
 		//X and Y coordinates
-		int temp = rand() % 26;
+		int temp = rand() % 256;
 		genes[geneNum] = temp / 100 + 48;
 		genes[geneNum + 1] = (temp / 10) % 10 + 48;
 		genes[geneNum + 2] = temp % 10 + 48;
 		geneNum += 3;
-		temp = rand() % 26;
+		temp = rand() % 256;
 		genes[geneNum] = temp / 100 + 48;
 		genes[geneNum + 1] = (temp / 10) % 10 + 48;
 		genes[geneNum + 2] = temp % 10 + 48;
 		geneNum += 3;
 
 		//Radius
-		temp = rand() % 6;
+		temp = rand() % 64;
 		genes[geneNum] = temp / 100 + 48;
 		genes[geneNum + 1] = (temp / 10) % 10 + 48;
 		genes[geneNum + 2] = temp % 10 + 48;
@@ -166,16 +161,14 @@ double Specimen::fitness(Fitness solution)
 	if (fit == -1)
 	{
 		double sum = 0;
-		image = Mat::zeros(26, 26, CV_8UC3);
+		image = Mat::zeros(256, 256, CV_8UC3);
 		showCircle(genes);
 
-		similarity[0] = solution.getSim(1, image);
-		//similarity[1] = solution.getSim(2, image);
-		//similarity[2] = solution.getSim(4, image);
-		
-		//sum = similarity[0] + similarity[1] + similarity[2];
-		//fit = sum / 3;
-		fit = similarity[0];
+		similarity[0] = solution.getSim(image, 0);
+		fit = similarity[0]/2;
+
+		if(fit>42.5)
+			fit = 42.5+solution.getSim(image, 1);
 	}
 
 	return fit;

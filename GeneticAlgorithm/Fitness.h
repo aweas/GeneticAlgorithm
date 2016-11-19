@@ -20,141 +20,66 @@ class Fitness
 	private:
 		string solution;
 		Mat source;
+		MatND source_hist;
 	public:
+		int method = 0;
 		Fitness();
 		int solutionLength;
-		double getFitness(Mat image);
-		double getSim(int method, Mat image);
+		double getSim(Mat image, int method);
 };
 
 Fitness::Fitness()
 {
 	source = imread("asdf.jpg", 1);
+
+	int channels[] = { 0,1 };
+	int histSize[] = { 50,60 };
+	float hueRange[] = { 0,180 };
+	float satRange[] = { 0,256 };
+	const  float* ranges[] = { hueRange, satRange };
+
+	calcHist(&source, 1, channels, Mat(), source_hist, 2, histSize, ranges, true, false);
+	normalize(source_hist, source_hist, 0, 1, NORM_MINMAX, -1, Mat());
+
 	resize(source, source, Size(26, 26));
 }
-double Fitness::getSim(int method, Mat image)
+double Fitness::getSim(Mat image, int method)
 {
 	Mat test, temp;
-	//double PSNR = 100;
+	MatND hist_test;
 
-	resize(image, test, source.size());
-	//test = imread("Similarity62.jpg", 1);
-	//resize(test, test, source.size());
-
-	/*absdiff(source, test, temp);
-	temp.convertTo(temp, CV_32F);
-	temp = temp.mul(temp);
-
-	Scalar summary = sum(temp);
-	double channelSum = summary.val[0] + summary.val[1] + summary.val[2];
-
-	if (channelSum <= 1e-10)
-		return 0;
-	
-	double MSE = channelSum / (double)(source.channels()*source.total());
-
-	if(MSE != 0)
-		 PSNR = 10.0 * log10((255 * 255)/ MSE);
+	if (method == 0)
+		resize(image, test, source.size());
 	else
-		cout << MSE << endl;*/
+	{
+		int channels[] = { 0,1 };
+		int histSize[] = { 50,60 };
+		float hueRange[] = { 0,180 };
+		float satRange[] = { 0,256 };
+		const  float* ranges[] = { hueRange, satRange };
+		test = image;
 
-	//return PSNR;
+		calcHist(&test, 1, channels, Mat(), hist_test, 2, histSize, ranges, true, false);
+		normalize(hist_test, hist_test, 0, 1, NORM_MINMAX, -1, Mat());
+	}
 
 	if (!source.data || !test.data)
 	{
 		cout << "No image found, or you did not open .exe directly";
 		cin.get();
 	}
-	
-	double result = (10 - (norm(source, test, 4) / (double)(source.rows*test.cols)))*10;
+	double result;
+
+	if(method==0)
+		result = (10 - (norm(source, test, 4) / (double)(source.rows*test.cols)))*10;
+	if (method == 1)
+	{
+		double base_base = compareHist(source_hist, source_hist, 3);
+		double base_test1 = compareHist(source_hist, hist_test, 3);
+
+		result = (1-base_test1) * 100;
+	}
 	return result;
 }
 
-double Fitness::getFitness(Mat image)
-{
-	/*				WORKING IMAGE COMPARISION		*/
-	Mat src_base, hsv_base;
-	Mat src_test1, hsv_test1;
-
-	src_base = imread("asdf.jpg", 1);
-	//resize(image, src_test1, src_base.size());
-	src_test1 = imread("kropki.jpg", 1);
-
-	if (!src_base.data || !src_test1.data)
-	{
-		cout << "No image found, or you did not open .exe directly";
-		cin.get();
-	}
-
-	/// Convert to HSV
-	//cvtColor(src_base, hsv_base, COLOR_BGR2HSV);
-	//cvtColor(src_test1, hsv_test1, COLOR_BGR2HSV);
-
-	///// Using 50 bins for hue and 60 for saturation
-	//int h_bins = 50; int s_bins = 60;
-	//int histSize[] = { h_bins, s_bins };
-
-	//// hue varies from 0 to 179, saturation from 0 to 255
-	//float h_ranges[] = { 0, 180 };
-	//float s_ranges[] = { 0, 256 };
-
-	//const float* ranges[] = { h_ranges, s_ranges };
-
-	//// Use the o-th and 1-st channels
-	//int channels[] = { 0, 1 };
-
-	///// Histograms
-	//MatND hist_base;
-	//MatND hist_test1;
-
-	///// Calculate the histograms for the HSV images
-	//calcHist(&hsv_base, 1, channels, Mat(), hist_base, 2, histSize, ranges, true, false);
-	//normalize(hist_base, hist_base, 0, 1, NORM_MINMAX, -1, Mat());
-
-	//calcHist(&hsv_test1, 1, channels, Mat(), hist_test1, 2, histSize, ranges, true, false);
-	//normalize(hist_test1, hist_test1, 0, 1, NORM_MINMAX, -1, Mat());
-
-	//double max_base_value[4] = { 1,1000,46.739756, 1 };
-	double test1_sum = 0;
-
-	/// Apply the histogram comparison methods
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	//int compare_method = i;
-	//	//double base_base = compareHist(hist_base, hist_base, compare_method);
-	//	//double base_test1 = compareHist(hist_base, hist_test1, compare_method);
-
-	//	//switch (i)
-	//	//{
-	//	//case 0:
-	//	//	//test1_sum += base_test1 / base_base * 100 * 2;
-	//	//	//cout << "Algorithm " << i << ": " << base_test1 / base_base * 100<<endl;
-	//	//	break;
-	//	//case 1:
-	//	//	//test1_sum += (1000 - base_test1) / (1000 - base_base) * 100;
-	//	//	//cout << "Algorithm " << i << ": " << (1000 - base_test1) / (1000 - base_base) * 100 << endl;
-	//	//	break;
-	//	//case 2:
-	//	//	//test1_sum += base_test1 / max_base_value[i] * 100;
-	//	//	//cout << "Algorithm " << i << ": " << base_test1 / base_base * 100 << endl;
-	//	//	break;
-	//	//case 3:
-	//	//	//test1_sum += ((1 - base_test1) / (1 - base_base)) * 100;
-	//	//	//cout << "Algorithm " << i << ": " << ((1 - base_test1) / (1 - base_base)) * 100 << endl;
-	//	//	break;
-	//	//}
-	//}
-	//printf("Similarity: %f %c\n", test1_sum / 3, '%');
-	test1_sum += 100 - norm(src_base, src_test1, 1) / (src_base.rows*src_base.cols);
-	cout << "Algorithm " << 1 << ": " << 100 - norm(src_base, src_test1, 1) / (src_base.rows*src_base.cols) << "%" << endl;
-
-	test1_sum += 100 - norm(src_base, src_test1, 2) / (src_base.rows*src_base.cols);
-	cout << "Algorithm " << 2 << ": " << 100 - norm(src_base, src_test1, 2) / (src_base.rows*src_base.cols) << "%" << endl;
-
-	test1_sum += 100 - norm(src_base, src_test1, 4) / (src_base.rows*src_base.cols);
-	cout << "Algorithm " << 4 << ": " << 100 - norm(src_base, src_test1, 4) / (src_base.rows*src_base.cols) << "%" << endl;
-	//imshow("Image", image);
-	//cout << norm(src_base, image) << endl;
-	return test1_sum/3;
-}
 #endif
