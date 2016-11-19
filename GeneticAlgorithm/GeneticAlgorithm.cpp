@@ -41,6 +41,7 @@ int main(int argc, char** argv)
 	bool cont = true;
 	float threshold=0.0;
 	float last = 0.0;
+	bool color = false;
 	vector<float> data;
 
 	for (int i = 0;test.getFittest(solution).fitness(solution)<100 && test.getFittest(solution).fitness(solution)>0 && !_kbhit();i++, generationsCount++)
@@ -58,11 +59,10 @@ int main(int argc, char** argv)
 		}
 
 
-		if (fitness >= 85 && test.populationSize == POPULATION_SIZE)
+		if (fitness >= 42.5 && !color)
 		{
 			printf("------------- COLOR ADJUSTING -------------\n");
-			test.setPopulation(1000);
-			last = 0.0;
+			color = true;
 		}
 		
 		if (generationsCount % 10 == 0)
@@ -118,6 +118,6 @@ Mat plotGraph(std::vector<T>& vals, int YRange[2])
 		cv::line(image, cv::Point(i, rows - 1 - (vals[i] - bias)*scale*YRange[1]), cv::Point(i + 1, rows - 1 - (vals[i + 1] - bias)*scale*YRange[1]), Scalar(255, 0, 0), 1);
 	}
 
-	imwrite("Graph", image);
+	imwrite("Graph.jpg", image);
 	return image;
 }
