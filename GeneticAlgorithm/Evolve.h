@@ -125,43 +125,50 @@ void Evolve::mutate(int index)
 	int max = (*population).getSpecimen(index).genesLength;
 	int geneNum = 2;
 	string color[3];
-	string circlesNum = randomNum(50, oldGenes[0], oldGenes[0], oldGenes[1]);
+	string circlesNum = randomNum(50, oldGenes[0], oldGenes[0], oldGenes[1],1);
 	newGenes += circlesNum;
+
+	for (int j = 0;j < 3;j++)
+	{
+		//RGB
+		string res = randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		newGenes += res;
+		color[j] = res;
+		geneNum += 3;
+	}
 	for (int j = 0;j < atoi(circlesNum.c_str());j++)
 	{
-		for (int i = 0;i < 3;i++)
-		{
-			//Coords X and Y
-			newGenes += randomNum(256, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
-			geneNum += 3;
-			newGenes += randomNum(256, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
-			geneNum += 3;
-		}
+		//Coords X and Y
+		newGenes += randomNum(256, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+		newGenes += randomNum(256, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+		
+		//Radius
+		newGenes += randomNum(64, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+		
 		//Color
-		//printf("%i/%i\n", j, atoi(circlesNum.c_str()));
-		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2],geneNum);
-		geneNum += 3;
-		//cout << "G: "<<geneNum << endl;
-		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2], geneNum);
-		geneNum += 3;
-		//cout << "G: " << geneNum << endl;
-		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2], geneNum);
-		geneNum += 3;
-		//cout << "G: " << geneNum << endl;
 		//printf("%i: %c%c%c\n", geneNum, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
 	}
+	string str(oldGenes);
+	newGenes += str.substr(atoi(circlesNum.c_str())*18+12);
 
-	for (int i = newGenes.length(); newGenes.length() < 1352;i++)
-		newGenes += oldGenes[i];
 	(*population).addSpecimen(newGenes, index);
 }
 
 void Evolve::EvolvePop()
 {
-
 	sort();
 	fill();
 	crossover();
+	
 	int max = (*population).populationSize;
 	for(int i=1;i<max;i++)
 		mutate(i);
@@ -184,7 +191,7 @@ string Evolve::randomNum(int max, char hunD, char decD, char oneD, int min, stri
 	int one = max % 10;
 	int num = 0;
 
-	while (newGenes == reserved || newGenes=="" || num>max)
+	while (newGenes == reserved || newGenes=="" || num<min || num>max)
 	{
 		newGenes = "";
 
@@ -221,10 +228,9 @@ string Evolve::randomNum(int max, char hunD, char decD, char oneD, int min, stri
 		}
 		else
 			newGenes += oneD;
-
 		num = stoi(newGenes);
-
 	}
+	
 	return newGenes;
 }
 #endif
