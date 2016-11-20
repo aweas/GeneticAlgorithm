@@ -38,6 +38,12 @@ Fitness::Fitness()
 	float satRange[] = { 0,256 };
 	const  float* ranges[] = { hueRange, satRange };
 
+	if (!source.data)
+	{
+		cout << "No image found, or you did not open .exe directly";
+		cin.get();
+	}
+
 	calcHist(&source, 1, channels, Mat(), source_hist, 2, histSize, ranges, true, false);
 	normalize(source_hist, source_hist, 0, 1, NORM_MINMAX, -1, Mat());
 

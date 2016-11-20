@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 
 		float fitness = test.getFittest(solution).fitness(solution);
 
-		if (fitness == last && generationsCount % 5 == 0)
+		if (fitness <= last && generationsCount % 5 == 0)
 			printf("\r#%i Fitness: %f%c", generationsCount, fitness, '%');
 		else if (fitness > last)
 		{
@@ -111,7 +111,7 @@ Mat plotGraph(std::vector<T>& vals, int YRange[2])
 	float scale = 1. / ceil(*it.second - *it.first);
 	float bias = *it.first;
 	int rows = YRange[1] - YRange[0] + 1;
-	cv::Mat image = Mat::zeros(rows, vals.size(), CV_8UC3);
+	cv::Mat image = Mat::zeros(100, vals.size(), CV_8UC3);
 	image.setTo(0);
 	for (int i = 0; i < (int)vals.size() - 1; i++)
 	{
