@@ -150,8 +150,8 @@ double Specimen::fitness(Fitness solution)
 		similarity[0] = solution.getSim(image, 0);
 		fit = similarity[0]/2;
 
-		if(fit>42.5)
-			fit = 42.5+(solution.getSim(image, 1)/2);
+		if(fit>34.5)
+			fit = 34.5+(solution.getSim(image, 1)/2);
 	}
 
 	return fit;

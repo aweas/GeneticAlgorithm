@@ -59,7 +59,7 @@ int main(int argc, char** argv)
 		}
 
 
-		if (fitness >= 42.5 && !color)
+		if (fitness >= 34.5 && !color)
 		{
 			printf("------------- COLOR ADJUSTING -------------\n");
 			color = true;
