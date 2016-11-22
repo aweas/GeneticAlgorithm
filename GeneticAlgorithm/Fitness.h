@@ -47,7 +47,7 @@ Fitness::Fitness()
 	calcHist(&source, 1, channels, Mat(), source_hist, 2, histSize, ranges, true, false);
 	normalize(source_hist, source_hist, 0, 1, NORM_MINMAX, -1, Mat());
 
-	resize(source, source, Size(26, 26));
+	resize(source, source, Size(40, 40));
 }
 double Fitness::getSim(Mat image, int method)
 {

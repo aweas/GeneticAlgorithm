@@ -19,7 +19,7 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/nonfree/features2d.hpp"
 
-#define POPULATION_SIZE 100
+#define POPULATION_SIZE 1000
 #define ELITES_NUMBER 3
 #define SOLUTION_LENGTH 911
 
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 	bool color = false;
 	vector<float> data;
 
-	for (int i = 0;test.getFittest(solution).fitness(solution)<100 && test.getFittest(solution).fitness(solution)>0 && !_kbhit();i++, generationsCount++)
+	for (int i = 0;/*test.getFittest(solution).fitness(solution)<100 && test.getFittest(solution).fitness(solution)>0 && */!_kbhit();i++, generationsCount++)
 	{
 		evolvePop.EvolvePop();
 
@@ -59,7 +59,7 @@ int main(int argc, char** argv)
 		}
 
 
-		if (fitness >= 42.5 && !color)
+		if (fitness >= 38 && !color)
 		{
 			printf("------------- COLOR ADJUSTING -------------\n");
 			color = true;

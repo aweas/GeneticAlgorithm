@@ -165,10 +165,10 @@ double Specimen::fitness(Fitness solution)
 		showCircle(genes);
 
 		similarity[0] = solution.getSim(image, 0);
-		fit = similarity[0]/2;
+		fit = similarity[0];
 
-		if(fit>42.5)
-			fit = 42.5+(solution.getSim(image, 1)/2);
+		/*if(fit>38)
+			fit += (solution.getSim(image, 1)/2);*/
 	}
 
 	return fit;
