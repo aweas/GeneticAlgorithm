@@ -19,7 +19,7 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/nonfree/features2d.hpp"
 
-#define POPULATION_SIZE 1000
+#define POPULATION_SIZE 100
 #define ELITES_NUMBER 3
 #define SOLUTION_LENGTH 911
 

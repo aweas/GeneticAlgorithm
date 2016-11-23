@@ -90,7 +90,11 @@ void Specimen::showCircle(char genes[])
 
 		try
 		{
-			circle(image, Point(coordX, coordY), radius, Scalar(R, G, B), -1, 8);
+			Mat overlay;
+			image.copyTo(overlay);
+
+			circle(overlay, Point(coordX, coordY), radius, Scalar(R, G, B), -1, 8);
+			cv::addWeighted(overlay, 0.8, image, 0.2, 0, image);
 		}
 		catch (Exception e)
 		{
