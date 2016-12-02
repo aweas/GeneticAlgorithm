@@ -21,7 +21,7 @@
 
 #define POPULATION_SIZE 100
 #define ELITES_NUMBER 3
-#define SOLUTION_LENGTH 1352
+#define SOLUTION_LENGTH 911
 
 using namespace cv;
 using namespace std;
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 	bool color = false;
 	vector<float> data;
 
-	for (int i = 0;test.getFittest(solution).fitness(solution)<100 && test.getFittest(solution).fitness(solution)>0 && !_kbhit();i++, generationsCount++)
+	for (int i = 0;!_kbhit();i++, generationsCount++)
 	{
 		evolvePop.EvolvePop();
 
@@ -56,13 +56,6 @@ int main(int argc, char** argv)
 		{
 			printf("\r#%i Fitness: %f%c\n", generationsCount, fitness, '%');
 			last = fitness;
-		}
-
-
-		if (fitness >= 34.5 && !color)
-		{
-			printf("------------- COLOR ADJUSTING -------------\n");
-			color = true;
 		}
 		
 		if (generationsCount % 10 == 0)
@@ -80,7 +73,7 @@ int main(int argc, char** argv)
 
 	string dupa = ""; dupa += to_string(test.getFittest(solution).fitness(solution)); dupa += "%";
 	const char* ptr = dupa.c_str();
-	string simOne = "Method 1: "; simOne += to_string(test.getFittest(solution).similarity[0]); simOne += "%";
+	string simOne = "Generation: "; simOne += to_string(generationsCount);
 	const char* ptr1 = simOne.c_str();
 	string simTwo = "Circles num: "; simTwo += test.getFittest(solution).getGenes()[0]; simTwo += test.getFittest(solution).getGenes()[1];
 	const char* ptr2 = simTwo.c_str();
@@ -111,7 +104,7 @@ Mat plotGraph(std::vector<T>& vals, int YRange[2])
 	float scale = 1. / ceil(*it.second - *it.first);
 	float bias = *it.first;
 	int rows = YRange[1] - YRange[0] + 1;
-	cv::Mat image = Mat::zeros(100, vals.size(), CV_8UC3);
+	cv::Mat image = Mat::zeros(rows, vals.size(), CV_8UC3);
 	image.setTo(0);
 	for (int i = 0; i < (int)vals.size() - 1; i++)
 	{
