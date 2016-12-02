@@ -44,25 +44,18 @@ int main(int argc, char** argv)
 	bool color = false;
 	vector<float> data;
 
-	for (int i = 0;/*test.getFittest(solution).fitness(solution)<100 && test.getFittest(solution).fitness(solution)>0 && */!_kbhit();i++, generationsCount++)
+	for (int i = 0;!_kbhit();i++, generationsCount++)
 	{
 		evolvePop.EvolvePop();
 
 		float fitness = test.getFittest(solution).fitness(solution);
 
-		if (fitness == last && generationsCount % 5 == 0)
+		if (fitness <= last && generationsCount % 5 == 0)
 			printf("\r#%i Fitness: %f%c", generationsCount, fitness, '%');
 		else if (fitness > last)
 		{
 			printf("\r#%i Fitness: %f%c\n", generationsCount, fitness, '%');
 			last = fitness;
-		}
-
-
-		if (fitness >= 38 && !color)
-		{
-			printf("------------- COLOR ADJUSTING -------------\n");
-			color = true;
 		}
 		
 		if (generationsCount % 10 == 0)
@@ -80,7 +73,7 @@ int main(int argc, char** argv)
 
 	string dupa = ""; dupa += to_string(test.getFittest(solution).fitness(solution)); dupa += "%";
 	const char* ptr = dupa.c_str();
-	string simOne = "Method 1: "; simOne += to_string(test.getFittest(solution).similarity[0]); simOne += "%";
+	string simOne = "Generation: "; simOne += to_string(generationsCount);
 	const char* ptr1 = simOne.c_str();
 	string simTwo = "Circles num: "; simTwo += test.getFittest(solution).getGenes()[0]; simTwo += test.getFittest(solution).getGenes()[1];
 	const char* ptr2 = simTwo.c_str();
