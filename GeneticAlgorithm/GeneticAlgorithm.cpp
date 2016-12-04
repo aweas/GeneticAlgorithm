@@ -36,11 +36,13 @@ int main(int argc, char** argv)
 	Population test(POPULATION_SIZE, true);
 	cout << "1. Population created" << endl;
 	Fitness solution;
+	solution.Initialize((test.getFittest(solution).fitness(solution)));
+	cout << (test.getFittest(solution).fitness(solution)) << endl;
 	Evolve evolvePop(test, solution, ELITES_NUMBER);
 	int generationsCount = 0;
 
 	bool cont = true;
-	float threshold=0.0;
+	float threshold=-999999999999;
 	float last = 0.0;
 	bool color = false;
 	vector<float> data;
