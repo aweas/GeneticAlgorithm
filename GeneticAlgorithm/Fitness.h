@@ -20,7 +20,8 @@ class Fitness
 	private:
 		string solution;
 		Mat source;
-		MatND source_hist;
+		CvMat src;
+		unsigned char *BGRdata;
 	public:
 		int method = 0;
 		Fitness();
@@ -31,61 +32,34 @@ class Fitness
 Fitness::Fitness()
 {
 	source = imread("asdf.jpg", 1);
-
-	int channels[] = { 0,1 };
-	int histSize[] = { 50,60 };
-	float hueRange[] = { 0,180 };
-	float satRange[] = { 0,256 };
-	const  float* ranges[] = { hueRange, satRange };
-
 	if (!source.data)
 	{
 		cout << "No image found, or you did not open .exe directly";
 		cin.get();
 	}
-
-	calcHist(&source, 1, channels, Mat(), source_hist, 2, histSize, ranges, true, false);
-	normalize(source_hist, source_hist, 0, 1, NORM_MINMAX, -1, Mat());
-
-	resize(source, source, Size(40, 40));
+	cout << "2. Source image read" << endl;
+	BGRdata = (unsigned char*)(source.data);
+	cout << "3. Image decoded" << endl;
 }
-double Fitness::getSim(Mat image, int method)
+double Fitness::getSim(Mat image, int number)
 {
-	Mat test, temp;
-	MatND hist_test;
+	Mat test;
+	resize(image, test, source.size());
+	unsigned char *imageData = (unsigned char*)(test.data);
+	CvMat temp = test;
 
-	if (method == 0)
-		resize(image, test, source.size());
-	else
-	{
-		int channels[] = { 0,1 };
-		int histSize[] = { 50,60 };
-		float hueRange[] = { 0,180 };
-		float satRange[] = { 0,256 };
-		const  float* ranges[] = { hueRange, satRange };
-		test = image;
+	int cols = source.cols;
+	int rows = source.rows;
+	int fit = 1228800;
 
-		calcHist(&test, 1, channels, Mat(), hist_test, 2, histSize, ranges, true, false);
-		normalize(hist_test, hist_test, 0, 1, NORM_MINMAX, -1, Mat());
+	for (int i = 0;i < cols;i++) {
+		for (int j = 0;j < rows;j++) {
+			fit-= abs(imageData[temp.step * j + i] - BGRdata[temp.step * j + i]);
+			fit-= abs(imageData[temp.step * j + i + 1] - BGRdata[temp.step * j + i + 1]);
+			fit-= abs(imageData[temp.step * j + i + 2] - BGRdata[temp.step * j + i + 2]);
+		}
 	}
-
-	if (!source.data || !test.data)
-	{
-		cout << "No image found, or you did not open .exe directly";
-		cin.get();
-	}
-	double result;
-
-	if(method==0)
-		result = (10 - (norm(source, test, 4) / (double)(source.rows*test.cols)))*10;
-	if (method == 1)
-	{
-		double base_base = compareHist(source_hist, source_hist, 3);
-		double base_test1 = compareHist(source_hist, hist_test, 3);
-
-		result = (1-base_test1) * 100;
-	}
-	return result;
+	return fit;
 }
 
 #endif

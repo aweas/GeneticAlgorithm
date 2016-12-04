@@ -33,6 +33,7 @@ Evolve::Evolve(Population& pop, Fitness& sol, int eliteI)
 	population = &pop;
 	solution = &sol;
 	elite = eliteI;
+	cout << "4. Evolve data is set" << endl;
 }
 
 void Evolve::sort()

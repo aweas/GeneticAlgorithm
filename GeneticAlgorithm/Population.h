@@ -53,14 +53,16 @@ Specimen Population::getSpecimen(int index)
 
 Specimen Population::getFittest(Fitness solution)
 {
-	Specimen fittest = specimen[0];
+	Specimen *fittest = new Specimen;
+	//Specimen fittest = specimen[0];
+	*fittest = specimen[0];
 	for (int i = 1; i < populationSize; i++)
 	{
-		if (specimen[i].fitness(solution) >= fittest.fitness(solution))
-			fittest = specimen[i];
+		if (specimen[i].fitness(solution) >= (*fittest).fitness(solution))
+			(*fittest) = specimen[i];
 	}
 	
-	return fittest;
+	return (*fittest);
 }
 
 void Population::addSpecimen(string genes, int index)
@@ -83,7 +85,6 @@ void Population::setPopulation(int popSize)
 	temp = specimen;
 
 	specimen = new Specimen[popSize];
-
 
 	for (int i = 0;i < populationSize;i++)
 		specimen[i] = temp[i];

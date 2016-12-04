@@ -168,6 +168,11 @@ double Specimen::fitness(Fitness solution)
 		image = Mat::zeros(256, 256, CV_8UC3);
 		showCircle(genes);
 
+		/*string temp;
+		for (int i = 0;i < 2;i++)
+			temp += genes[i];*/
+		//int circlesNum = atoi(temp.c_str());
+
 		similarity[0] = solution.getSim(image, 0);
 		fit = similarity[0];
 
