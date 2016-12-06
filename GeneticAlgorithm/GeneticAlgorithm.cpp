@@ -37,12 +37,12 @@ int main(int argc, char** argv)
 	Population test(POPULATION_SIZE, true);
 	cout << "1. Population created" << endl;
 	Fitness solution;
-	//cout << (test.getFittest(solution).fitness(solution)) << endl;
+
 	Evolve evolvePop(test, solution, ELITES_NUMBER);
 	int generationsCount = 0;
 
 	bool cont = true;
-	float threshold=-999999999999;
+	float threshold = test.getFittest(solution).fitness(solution);
 	float last = 0.0;
 	bool color = false;
 	vector<float> data;
@@ -67,10 +67,10 @@ int main(int argc, char** argv)
 		{
 			Mat temp = test.getFittest(solution).image;
 			string name = "Similarity"+ to_string(fitness)+".jpg";
-			//string simOne = "Generation: " + to_string(generationsCount);
+			string simOne = "Generation: " + to_string(generationsCount);
 
-			//putText(temp, simOne.c_str(), cvPoint(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
-			//imwrite(name.c_str(), temp);
+			putText(temp, simOne.c_str(), cvPoint(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
+			imwrite(name.c_str(), temp);
 			threshold = fitness + 0.5;
 		}
 
@@ -86,7 +86,6 @@ int main(int argc, char** argv)
 	const char* ptr1 = simOne.c_str();
 	string simTwo = "Circles num: "; simTwo += test.getFittest(solution).getGenes()[0]; simTwo += test.getFittest(solution).getGenes()[1];
 	const char* ptr2 = simTwo.c_str();
-	//cout << endl<< ptr << endl;
 
 	putText(temp, ptr, cvPoint(30, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
 	putText(temp, ptr1, cvPoint(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
@@ -94,9 +93,6 @@ int main(int argc, char** argv)
 
 	imshow("Image", temp);
 
-	//cout << endl << data[0] << endl;
-
-	//iota(data.begin(), data.end(), 0);
 	int range[2] = { 0,200 };
 
 	cv::Mat lineGraph = plotGraph(data, range, test.getFittest(solution).fitness(solution));
