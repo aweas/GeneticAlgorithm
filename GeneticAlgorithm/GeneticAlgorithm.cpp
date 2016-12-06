@@ -28,7 +28,7 @@ using namespace cv;
 using namespace std;
 
 template <typename T>
-Mat plotGraph(std::vector<T>& vals, int YRange[2]);
+Mat plotGraph(std::vector<T>& vals, int YRange[2], int value);
 
 int main(int argc, char** argv)
 {
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 			//string simOne = "Generation: " + to_string(generationsCount);
 
 			//putText(temp, simOne.c_str(), cvPoint(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
-			imwrite(name.c_str(), temp);
+			//imwrite(name.c_str(), temp);
 			threshold = fitness + 0.5;
 		}
 
@@ -97,9 +97,9 @@ int main(int argc, char** argv)
 	//cout << endl << data[0] << endl;
 
 	//iota(data.begin(), data.end(), 0);
-	int range[2] = { 0,100 };
+	int range[2] = { 0,200 };
 
-	cv::Mat lineGraph = plotGraph(data, range);
+	cv::Mat lineGraph = plotGraph(data, range, test.getFittest(solution).fitness(solution));
 	
 	imshow("Graph", lineGraph);
 	string name = "Graph " + to_string(test.getFittest(solution).fitness(solution)) + ".jpg";
@@ -109,7 +109,7 @@ int main(int argc, char** argv)
 }
 
 template <typename T>
-cv::Mat plotGraph(std::vector<T>& vals, int YRange[2])
+cv::Mat plotGraph(std::vector<T>& vals, int YRange[2], int value)
 {
 	auto it = minmax_element(vals.begin(), vals.end());
 	float scale = ceil(abs(vals[0])-abs(vals[vals.size()-1]));
@@ -117,12 +117,13 @@ cv::Mat plotGraph(std::vector<T>& vals, int YRange[2])
 	int rows = YRange[1] - YRange[0] + 1;
 	cv::Mat image = Mat::zeros(rows, vals.size(), CV_8UC3);
 	image.setTo(0);
-	//cout << abs(vals[0]) << "-" << abs(vals[vals.size()-1]) << "=" << scale << endl << endl;
+
 	for (int i = 0; i < (int)vals.size() - 1; i++)
-	{
-		//cout << "(" << i << ", " << (abs(vals[i]) - abs(vals[vals.size()-1])) / scale*YRange[1] << ")" << endl;
 		cv::line(image, cv::Point(i, (abs(vals[i]) - abs(vals[vals.size()-1]))/scale*YRange[1]), cv::Point(i + 1, (abs(vals[i+1]) - abs(vals[vals.size()-1]))/scale*YRange[1]), Scalar(255, 0, 0), 1);
-	}
+
+	string simOne = to_string(value);
+
+	putText(image, simOne.c_str(), cvPoint(10, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 255, 0), 1, CV_AA);
 
 	return image;
 }
