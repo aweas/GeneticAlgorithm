@@ -58,8 +58,7 @@ int main(int argc, char** argv)
 			last = fitness;
 		}
 		
-		if (generationsCount % 10 == 0)
-			data.push_back(fitness);
+		data.push_back(fitness);
 
 		if (fitness>threshold)
 		{
@@ -68,6 +67,7 @@ int main(int argc, char** argv)
 			imwrite(name.c_str(), temp);
 			threshold = fitness + 0.5;
 		}
+
 	}
 	Mat temp = test.getFittest(solution).image;
 
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
 
 	imshow("Image", temp);
 
-	iota(data.begin(), data.end(), 0);
+	//iota(data.begin(), data.end(), 0);
 	int range[2] = { 0,100 };
 
 	Mat graph = plotGraph(data, range);
@@ -97,20 +97,18 @@ int main(int argc, char** argv)
 }
 
 template <typename T>
-Mat plotGraph(std::vector<T>& vals, int YRange[2])
+cv::Mat plotGraph(std::vector<T>& vals, int YRange[2])
 {
-
 	auto it = minmax_element(vals.begin(), vals.end());
-	float scale = 1. / ceil(*it.second - *it.first);
+	float scale = ceil(abs(vals[0]) - abs(vals[vals.size() - 1]));
 	float bias = *it.first;
 	int rows = YRange[1] - YRange[0] + 1;
 	cv::Mat image = Mat::zeros(rows, vals.size(), CV_8UC3);
 	image.setTo(0);
 	for (int i = 0; i < (int)vals.size() - 1; i++)
 	{
-		cv::line(image, cv::Point(i, rows - 1 - (vals[i] - bias)*scale*YRange[1]), cv::Point(i + 1, rows - 1 - (vals[i + 1] - bias)*scale*YRange[1]), Scalar(255, 0, 0), 1);
+		cv::line(image, cv::Point(i, (abs(vals[i]) - abs(vals[vals.size() - 1])) / scale*YRange[1]), cv::Point(i + 1, (abs(vals[i + 1]) - abs(vals[vals.size() - 1])) / scale*YRange[1]), Scalar(255, 0, 0), 1);
 	}
 
-	imwrite("Graph.jpg", image);
 	return image;
 }
