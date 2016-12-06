@@ -122,19 +122,19 @@ void Specimen::generate()
 	for (int i = 0; i < 50; i++)
 	{
 		//X and Y coordinates
-		int temp = rand() % 256;
+		int temp = rand() % 128;
 		genes[geneNum] = temp / 100 + 48;
 		genes[geneNum + 1] = (temp / 10) % 10 + 48;
 		genes[geneNum + 2] = temp % 10 + 48;
 		geneNum += 3;
-		temp = rand() % 256;
+		temp = rand() % 128;
 		genes[geneNum] = temp / 100 + 48;
 		genes[geneNum + 1] = (temp / 10) % 10 + 48;
 		genes[geneNum + 2] = temp % 10 + 48;
 		geneNum += 3;
 
 		//Radius
-		temp = rand() % 64;
+		temp = rand() % 32;
 		genes[geneNum] = temp / 100 + 48;
 		genes[geneNum + 1] = (temp / 10) % 10 + 48;
 		genes[geneNum + 2] = temp % 10 + 48;
@@ -165,8 +165,13 @@ double Specimen::fitness(Fitness solution)
 	if (fit == -1)
 	{
 		double sum = 0;
-		image = Mat::zeros(256, 256, CV_8UC3);
+		image = Mat::zeros(128, 128, CV_8UC3);
 		showCircle(genes);
+
+		/*string temp;
+		for (int i = 0;i < 2;i++)
+			temp += genes[i];*/
+		//int circlesNum = atoi(temp.c_str());
 
 		similarity[0] = solution.getSim(image, 0);
 		fit = similarity[0];
