@@ -63,16 +63,13 @@ int main(int argc, char** argv)
 			last = fitness;
 		}
 
-		if (fitness>threshold)
-		{
-			Mat temp = test.getFittest(solution).image;
-			string name = "Similarity"+ to_string(fitness)+".jpg";
-			string simOne = "Generation: " + to_string(generationsCount);
+		Mat temp = test.getFittest(solution).image;
+		//string name = "Similarity"+ to_string(fitness)+".jpg";
+		string simOne = "G: " + to_string(generationsCount);
 
-			putText(temp, simOne.c_str(), cvPoint(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
-			imwrite(name.c_str(), temp);
-			threshold = fitness + 0.5;
-		}
+		putText(temp, simOne.c_str(), cvPoint(0, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
+		//imwrite(name.c_str(), temp);
+		threshold = fitness + 0.5;
 
 		data.push_back(fitness);
 		imshow("Image", test.getFittest(solution).image);
@@ -82,9 +79,9 @@ int main(int argc, char** argv)
 
 	string dupa = ""; dupa += to_string(test.getFittest(solution).fitness(solution)); dupa += "%";
 	const char* ptr = dupa.c_str();
-	string simOne = "Generation: "; simOne += to_string(generationsCount);
+	string simOne = "G: "; simOne += to_string(generationsCount);
 	const char* ptr1 = simOne.c_str();
-	string simTwo = "Circles num: "; simTwo += test.getFittest(solution).getGenes()[0]; simTwo += test.getFittest(solution).getGenes()[1];
+	string simTwo = "C: "; simTwo += test.getFittest(solution).getGenes()[0]; simTwo += test.getFittest(solution).getGenes()[1];
 	const char* ptr2 = simTwo.c_str();
 
 	putText(temp, ptr, cvPoint(30, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
