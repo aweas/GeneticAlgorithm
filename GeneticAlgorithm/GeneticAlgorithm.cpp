@@ -9,6 +9,7 @@
 #include <ctime>
 #include <conio.h>
 #include <numeric>
+#include <vector>
 
 #include <opencv\cv.h>
 #include <opencv2/core.hpp>
@@ -36,8 +37,7 @@ int main(int argc, char** argv)
 	Population test(POPULATION_SIZE, true);
 	cout << "1. Population created" << endl;
 	Fitness solution;
-	solution.Initialize((test.getFittest(solution).fitness(solution)));
-	cout << (test.getFittest(solution).fitness(solution)) << endl;
+	//cout << (test.getFittest(solution).fitness(solution)) << endl;
 	Evolve evolvePop(test, solution, ELITES_NUMBER);
 	int generationsCount = 0;
 
@@ -47,14 +47,16 @@ int main(int argc, char** argv)
 	bool color = false;
 	vector<float> data;
 
-	for (int i = 0;!_kbhit();i++, generationsCount++)
+	for (int i = 0;i<300 && !_kbhit();i++, generationsCount++)
 	{
 		evolvePop.EvolvePop();
 
 		float fitness = test.getFittest(solution).fitness(solution);
 
 		if (fitness <= last && generationsCount % 5 == 0)
+		{
 			printf("\r#%i Fitness: %f%c", generationsCount, fitness, '%');
+		}
 		else if (fitness > last)
 		{
 			printf("\r#%i Fitness: %f%c\n", generationsCount, fitness, '%');
@@ -65,12 +67,16 @@ int main(int argc, char** argv)
 		{
 			Mat temp = test.getFittest(solution).image;
 			string name = "Similarity"+ to_string(fitness)+".jpg";
-			string simOne = "Generation: " + to_string(generationsCount);
+			//string simOne = "Generation: " + to_string(generationsCount);
 
-			putText(temp, simOne.c_str(), cvPoint(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
+			//putText(temp, simOne.c_str(), cvPoint(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
 			imwrite(name.c_str(), temp);
 			threshold = fitness + 0.5;
 		}
+
+		data.push_back(fitness);
+		imshow("Image", test.getFittest(solution).image);
+		waitKey(1);
 	}
 	Mat temp = test.getFittest(solution).image;
 
@@ -80,7 +86,7 @@ int main(int argc, char** argv)
 	const char* ptr1 = simOne.c_str();
 	string simTwo = "Circles num: "; simTwo += test.getFittest(solution).getGenes()[0]; simTwo += test.getFittest(solution).getGenes()[1];
 	const char* ptr2 = simTwo.c_str();
-	cout << endl<< ptr << endl;
+	//cout << endl<< ptr << endl;
 
 	putText(temp, ptr, cvPoint(30, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
 	putText(temp, ptr1, cvPoint(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
@@ -88,10 +94,35 @@ int main(int argc, char** argv)
 
 	imshow("Image", temp);
 
-	iota(data.begin(), data.end(), 0);
+	//cout << endl << data[0] << endl;
+
+	//iota(data.begin(), data.end(), 0);
 	int range[2] = { 0,100 };
 
-	waitKey(1);
-	cin.get();
+	cv::Mat lineGraph = plotGraph(data, range);
+	
+	imshow("Graph", lineGraph);
+	string name = "Graph " + to_string(test.getFittest(solution).fitness(solution)) + ".jpg";
+	imwrite(name.c_str(), lineGraph);
+	waitKey(0);
 	return 0;
+}
+
+template <typename T>
+cv::Mat plotGraph(std::vector<T>& vals, int YRange[2])
+{
+	auto it = minmax_element(vals.begin(), vals.end());
+	float scale = ceil(abs(vals[0])-abs(vals[vals.size()-1]));
+	float bias = *it.first;
+	int rows = YRange[1] - YRange[0] + 1;
+	cv::Mat image = Mat::zeros(rows, vals.size(), CV_8UC3);
+	image.setTo(0);
+	//cout << abs(vals[0]) << "-" << abs(vals[vals.size()-1]) << "=" << scale << endl << endl;
+	for (int i = 0; i < (int)vals.size() - 1; i++)
+	{
+		//cout << "(" << i << ", " << (abs(vals[i]) - abs(vals[vals.size()-1])) / scale*YRange[1] << ")" << endl;
+		cv::line(image, cv::Point(i, (abs(vals[i]) - abs(vals[vals.size()-1]))/scale*YRange[1]), cv::Point(i + 1, (abs(vals[i+1]) - abs(vals[vals.size()-1]))/scale*YRange[1]), Scalar(255, 0, 0), 1);
+	}
+
+	return image;
 }

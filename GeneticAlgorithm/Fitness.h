@@ -53,21 +53,21 @@ double Fitness::getSim(Mat image, int number)
 {
 	Mat test;
 	resize(image, test, source.size());
-	//unsigned char *imageData = (unsigned char*)(test.data);
-	//CvMat temp = test;
+	unsigned char *imageData = (unsigned char*)(test.data);
+	CvMat temp = test;
 
 	int cols = source.cols;
 	int rows = source.rows;
 	long fit = 0;
 
 	for (int i = 0;i < cols;i++) {
+		//int multiplier = 0;
 		for (int j = 0;j < rows;j++) {
+			//if (i > 61 && i < 97 && j<76 && j>10)
+				//multiplier = 3;
+
 			Point3_<uchar>* p = test.ptr<Point3_<uchar> >(j, i);
 			Point3_<uchar>* s = source.ptr<Point3_<uchar> >(j, i);
-			/*long mean = (imageData[temp.step * j + i + 2] + BGRdata[temp.step * j + i + 2])/2;
-			long r = imageData[temp.step * j + i + 2] - BGRdata[temp.step * j + i + 2];
-			long g = imageData[temp.step * j + i + 1] - BGRdata[temp.step * j + i + 1];
-			long b = imageData[temp.step * j + i] - BGRdata[temp.step * j + i];*/
 
 			long mean = (p->z + s->z) / 2;
 			long r = p->z - s->z;
@@ -75,20 +75,10 @@ double Fitness::getSim(Mat image, int number)
 			long b = p->x - s->x;
 
 			fit -= (sqrt((((512 + mean)*r*r) >> 8) + 4 * g*g + (((767 - mean)*b*b) >> 8)));
-			/*if(abs(imageData[temp.step * j + i] - BGRdata[temp.step * j + i])<10)
-				fit+= 10 - abs(imageData[temp.step * j + i] - BGRdata[temp.step * j + i]);
-			if (abs(imageData[temp.step * j + i + 1] - BGRdata[temp.step * j + i + 1]) < 10)
-				fit+= 10 - abs(imageData[temp.step * j + i + 1] - BGRdata[temp.step * j + i + 1]);
-			if (abs(imageData[temp.step * j + i + 2] - BGRdata[temp.step * j + i + 2]) < 10)
-				fit+= 10 - abs(imageData[temp.step * j + i + 2] - BGRdata[temp.step * j + i + 2]);*/
-			//printf("(%i, %i):", i, j);
-			//cout <<sqrt((((512 + mean)*r*r) >> 8) + 4 * g*g + (((767 - mean)*b*b) >> 8)) << endl;
 		}
 	}
-	//cin.get();
-	//cout << fit << " " << firstSpecimen << endl;
-	//return ((double)(fit - firstSpecimen)*100/firstSpecimen);
-	return fit;
+//	cout << fit << " " << firstSpecimen << endl;
+	return ((double)(fit - firstSpecimen)*100/firstSpecimen);
 }
 
 #endif
