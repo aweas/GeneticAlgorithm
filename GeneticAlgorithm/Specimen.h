@@ -54,9 +54,9 @@ void Specimen::showCircle(char genes[])
 		temp += genes[currentGene];
 	int bB= atoi(temp.c_str());
 	temp = "";
-	image.setTo(cv::Scalar(255, 255, 255));
+	image.setTo(cv::Scalar(0, 0, 0));
 
-	for (int j = 0;j < circlesNum;j++)
+	for (int j = 0;j < 50;j++)
 	{
 		for (int i = 0;i < 3;i++, currentGene++)
 			temp += genes[currentGene];

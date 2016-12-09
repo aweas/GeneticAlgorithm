@@ -128,7 +128,7 @@ void Evolve::mutate(int index)
 		color[j] = res;
 		geneNum += 3;
 	}
-	for (int j = 0;j < atoi(circlesNum.c_str());j++)
+	for (int j = 0;j < 50/*atoi(circlesNum.c_str())*/;j++)
 	{
 		//Coords X and Y
 		newGenes += randomNum(128, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
@@ -149,8 +149,8 @@ void Evolve::mutate(int index)
 		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
 		geneNum += 3;
 	}
-	string str(oldGenes);
-	newGenes += str.substr(atoi(circlesNum.c_str())*18+12);
+	//string str(oldGenes);
+	//newGenes += str.substr(atoi(circlesNum.c_str())*18+12);
 
 	(*population).addSpecimen(newGenes, index);
 }

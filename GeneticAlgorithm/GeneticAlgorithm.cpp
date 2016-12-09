@@ -47,29 +47,32 @@ int main(int argc, char** argv)
 	bool color = false;
 	vector<float> data;
 
-	for (int i = 0;i<300 && !_kbhit();i++, generationsCount++)
+	for (int i = 0;/*i<300 &&*/ !_kbhit();i++, generationsCount++)
 	{
 		evolvePop.EvolvePop();
 
 		float fitness = test.getFittest(solution).fitness(solution);
 
-		if (fitness <= last && generationsCount % 5 == 0)
+		if (generationsCount % 5 == 0)
 		{
 			printf("\r#%i Fitness: %f%c", generationsCount, fitness, '%');
 		}
-		else if (fitness > last)
+		//else if (fitness > last)
+		//{
+		//	printf("\r#%i Fitness: %f%c\n", generationsCount, fitness, '%');
+		//	last = fitness;
+		//}
+
+		if (fitness > threshold)
 		{
-			printf("\r#%i Fitness: %f%c\n", generationsCount, fitness, '%');
-			last = fitness;
+			Mat temp = test.getFittest(solution).image;
+			string name = "Similarity" + to_string(fitness) + ".jpg";
+			string simOne = "G: " + to_string(generationsCount);
+
+			putText(temp, simOne.c_str(), cvPoint(0, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
+			imwrite(name.c_str(), temp);
+			threshold = fitness + 0.5;
 		}
-
-		Mat temp = test.getFittest(solution).image;
-		//string name = "Similarity"+ to_string(fitness)+".jpg";
-		string simOne = "G: " + to_string(generationsCount);
-
-		putText(temp, simOne.c_str(), cvPoint(0, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
-		//imwrite(name.c_str(), temp);
-		threshold = fitness + 0.5;
 
 		data.push_back(fitness);
 		imshow("Image", test.getFittest(solution).image);
@@ -77,18 +80,21 @@ int main(int argc, char** argv)
 	}
 	Mat temp = test.getFittest(solution).image;
 
-	string dupa = ""; dupa += to_string(test.getFittest(solution).fitness(solution)); dupa += "%";
+	string dupa = to_string(test.getFittest(solution).fitness(solution)) + ".jpg";
 	const char* ptr = dupa.c_str();
 	string simOne = "G: "; simOne += to_string(generationsCount);
 	const char* ptr1 = simOne.c_str();
 	string simTwo = "C: "; simTwo += test.getFittest(solution).getGenes()[0]; simTwo += test.getFittest(solution).getGenes()[1];
 	const char* ptr2 = simTwo.c_str();
 
-	putText(temp, ptr, cvPoint(30, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
-	putText(temp, ptr1, cvPoint(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
-	putText(temp, ptr2, cvPoint(30, 90), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
+	putText(temp, ptr, cvPoint(0, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
+	putText(temp, ptr1, cvPoint(0, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
+	putText(temp, ptr2, cvPoint(0, 90), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
 
+	resize(temp, temp, Size(128, 128));
 	imshow("Image", temp);
+
+	imwrite(dupa.c_str(), temp);
 
 	int range[2] = { 0,200 };
 
