@@ -15,7 +15,7 @@ class Evolve
 		void crossover();
 		Specimen select();
 		void mutate(int index);
-		int elite = 5;
+		int elite = 3;
 		string intToString(int num);
 		string randomNum(int max, char hun, char dec, char one, int min=0, string reserved="256");
 	public:
@@ -33,6 +33,7 @@ Evolve::Evolve(Population& pop, Fitness& sol, int eliteI)
 	population = &pop;
 	solution = &sol;
 	elite = eliteI;
+	cout << "4. Evolve data is set" << endl;
 }
 
 void Evolve::sort()
@@ -54,26 +55,23 @@ void Evolve::fill()
 {
 	vector<Specimen> best;
 	Specimen temp;
-	int counter=0;
 
-	for (int i = 0;i < elite;i++)
-		best.push_back((*population).getSpecimen(i));
+	int counter = 0;
+	int size = (*population).populationSize;
+	Population temporaryPopulation(size, true);
 
-	for (int i = 0;i < (*population).populationSize;i++)
+	for (int i = 0;i < 0.9*size; i++)
 	{
-		temp.generate();
-		(*population).addSpecimen(temp.getGenes(),i);
+		int limit = 1;
+		if (i < elite)
+			limit = (size / (3 * (i + 1)));
+
+		for (int j = 0; j < limit && counter< 0.9*size; j++, counter++)
+			temporaryPopulation.addSpecimen((*population).getSpecimen(i).getGenes(), counter);
 	}
 
-	for (int i = 0;i < elite; i++)
-	{
-		int limit = (counter + (*population).populationSize / (3 * (i + 1)));
-		for (int j = counter; j < limit && j<(*population).populationSize; j++)
-		{
-			(*population).addSpecimen(best[i].getGenes(), j);
-			counter++;
-		}
-	}
+	for (int i = 0;i < 100;i++)
+		(*population).addSpecimen(temporaryPopulation.getSpecimen(i).getGenes(), i);
 }
 
 Specimen Evolve::select()
@@ -94,25 +92,19 @@ Specimen Evolve::select()
 
 void Evolve::crossover()
 {
-	
-	Specimen father = (*population).getSpecimen(0);
-
-	int max = father.getGenes().length();
+	int max = (*population).getSpecimen(0).getGenes().length();
 	int maxPop = (*population).populationSize;
-	
 	for (int j = 1;j < maxPop; j++)
 	{
-		Specimen father = select();
+		Specimen father = (*population).getSpecimen(j);
 		Specimen mother = select();
 		string genes;
-
 		for (int i = 0;i < max; i++)
 		{
 			string gene[2] = { father.getGenes(i), mother.getGenes(i) };
-			int pick = rand() % 2;	
+			int pick = rand() % 2;
 			genes += gene[pick];
 		}
-		
 		(*population).addSpecimen(genes, j);	
 	}
 }
@@ -132,25 +124,20 @@ void Evolve::mutate(int index)
 		for (int i = 0;i < 3;i++)
 		{
 			//Coords X and Y
-			newGenes += randomNum(256, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+			newGenes += randomNum(128, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
 			geneNum += 3;
-			newGenes += randomNum(256, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+			newGenes += randomNum(128, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
 			geneNum += 3;
 		}
-		//Color
-		//printf("%i/%i\n", j, atoi(circlesNum.c_str()));
-		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2],geneNum);
-		geneNum += 3;
-		//cout << "G: "<<geneNum << endl;
-		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2], geneNum);
-		geneNum += 3;
-		//cout << "G: " << geneNum << endl;
-		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2], geneNum);
-		geneNum += 3;
-		//cout << "G: " << geneNum << endl;
-		//printf("%i: %c%c%c\n", geneNum, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
-	}
 
+		//Color
+		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+		newGenes += randomNum(255, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		geneNum += 3;
+	}
 	for (int i = newGenes.length(); newGenes.length() < 1352;i++)
 		newGenes += oldGenes[i];
 	(*population).addSpecimen(newGenes, index);
@@ -184,7 +171,7 @@ string Evolve::randomNum(int max, char hunD, char decD, char oneD, int min, stri
 	int one = max % 10;
 	int num = 0;
 
-	while (newGenes == reserved || newGenes=="" || num>max)
+	while (newGenes == reserved || newGenes == "" || num<min || num>max)
 	{
 		newGenes = "";
 
@@ -195,13 +182,13 @@ string Evolve::randomNum(int max, char hunD, char decD, char oneD, int min, stri
 			else
 				newGenes += hunD;
 		}
-		else if (max == 64 || max == 23)
+		else if (max == 32 || max == 23)
 			newGenes += "0";
 		i++;
 
 		if (rand() % 1000 <= MUTATION_RATE)
 		{
-			if (newGenes[i - 1] != intToString(hun)[0] && max>=100)
+			if (newGenes[i - 1] != intToString(hun)[0] && max >= 100)
 				newGenes += intToString(rand() % 10);
 			else
 				newGenes += intToString(rand() % (dec + 1));
@@ -221,10 +208,9 @@ string Evolve::randomNum(int max, char hunD, char decD, char oneD, int min, stri
 		}
 		else
 			newGenes += oneD;
-
 		num = stoi(newGenes);
-
 	}
+
 	return newGenes;
 }
 #endif

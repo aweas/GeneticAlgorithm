@@ -44,7 +44,7 @@ void Specimen::showCircle(char genes[])
 
 	image.setTo(cv::Scalar(255, 255, 255));
 
-	for (int j = 0;j < circlesNum;j++)
+	for (int j = 0;j < 50;j++)
 	{
 		//cout << j <<" "<<circlesNum[0]<<endl;
 		Point trianglePoints[1][3];
@@ -81,18 +81,15 @@ void Specimen::showCircle(char genes[])
 			temp += genes[currentGene];
 		int B = atoi(temp.c_str());
 		temp = "";
-		try
-		{
-			//circle(image, Point(coordX, coordY), radius, Scalar(R, G, B), -1, 8);
-			const Point* ppt[1] = { trianglePoints[0] };
-			int num[] = { 3 };
-			fillPoly(image, ppt, num, 1, Scalar(R, G, B), 8);
-		}
-		catch (Exception e)
-		{
-			cout << e.msg << endl;
-			cout << radius << " " << R << " " << G << " " << B << " " << endl;
-		}
+
+		//circle(image, Point(coordX, coordY), radius, Scalar(R, G, B), -1, 8);
+		Mat overlay;
+		image.copyTo(overlay);
+		const Point* ppt[1] = { trianglePoints[0] };
+		int num[] = { 3 };
+
+		fillPoly(overlay, ppt, num, 1, Scalar(R, G, B), 8);
+		addWeighted(overlay, 0.8, image, 0.2, 0, image);
 	}
 
 }
@@ -109,12 +106,12 @@ void Specimen::generate()
 		for (int j = 0;j < 3;j++)
 		{
 			//X and Y coordinates
-			int temp = rand() % 256;
+			int temp = rand() % 128;
 			genes[geneNum] = temp / 100 + 48;
 			genes[geneNum + 1] = (temp / 10) % 10 + 48;
 			genes[geneNum + 2] = temp % 10 + 48;
 			geneNum += 3;
-			temp = rand() % 256;
+			temp = rand() % 128;
 			genes[geneNum] = temp / 100 + 48;
 			genes[geneNum + 1] = (temp / 10) % 10 + 48;
 			genes[geneNum + 2] = temp % 10 + 48;
@@ -145,7 +142,7 @@ double Specimen::fitness(Fitness solution)
 	if (fit == -1)
 	{
 		double sum = 0;
-		image = Mat::zeros(256, 256, CV_8UC3);
+		image = Mat::zeros(128, 128, CV_8UC3);
 		showCircle(genes);
 		similarity[0] = solution.getSim(image, 0);
 		fit = similarity[0]/2;
