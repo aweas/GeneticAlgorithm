@@ -43,6 +43,8 @@ int main(int argc, char** argv)
 
 	bool cont = true;
 	float threshold = test.getFittest(solution).fitness(solution);
+	solution.Initialize(threshold);
+	printf("First specimen fitness: %f\n", threshold);
 	float last = 0.0;
 	bool color = false;
 	vector<float> data;
@@ -50,7 +52,7 @@ int main(int argc, char** argv)
 	for (int i = 0;/*i<300 &&*/ !_kbhit();i++, generationsCount++)
 	{
 		evolvePop.EvolvePop();
-
+		
 		float fitness = test.getFittest(solution).fitness(solution);
 
 		if (generationsCount % 5 == 0)
@@ -71,11 +73,12 @@ int main(int argc, char** argv)
 
 			putText(temp, simOne.c_str(), cvPoint(0, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
 			imwrite(name.c_str(), temp);
-			threshold = fitness + 0.5;
+			threshold = fitness + 0.25;
 		}
 
 		data.push_back(fitness);
 		imshow("Image", test.getFittest(solution).image);
+		imshow("Source", solution.source);
 		waitKey(1);
 	}
 	Mat temp = test.getFittest(solution).image;

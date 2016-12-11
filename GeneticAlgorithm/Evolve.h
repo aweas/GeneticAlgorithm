@@ -64,7 +64,7 @@ void Evolve::fill()
 	{
 		int limit = 1;
 		if (i < elite)
-			limit = (size / (3 * (i + 1)));
+			limit = (size / (3 * (i + 2)));
 
 		for (int j=0; j < limit && counter< 0.9*size; j++, counter++)
 			temporaryPopulation.addSpecimen((*population).getSpecimen(i).getGenes(), counter);
@@ -137,7 +137,7 @@ void Evolve::mutate(int index)
 		geneNum += 3;
 		
 		//Radius
-		newGenes += randomNum(32, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
+		newGenes += randomNum(26, oldGenes[geneNum], oldGenes[geneNum + 1], oldGenes[geneNum + 2]);
 		geneNum += 3;
 		
 		//Color
@@ -151,7 +151,6 @@ void Evolve::mutate(int index)
 	}
 	//string str(oldGenes);
 	//newGenes += str.substr(atoi(circlesNum.c_str())*18+12);
-
 	(*population).addSpecimen(newGenes, index);
 }
 
@@ -194,7 +193,7 @@ string Evolve::randomNum(int max, char hunD, char decD, char oneD, int min, stri
 			else
 				newGenes += hunD;
 		}
-		else if (max == 32 || max == 23)
+		else if (max == 26 || max == 8)
 			newGenes += "0";
 		i++;
 
@@ -205,7 +204,7 @@ string Evolve::randomNum(int max, char hunD, char decD, char oneD, int min, stri
 			else
 				newGenes += intToString(rand() % (dec + 1));
 		}
-		else if (max == 6)
+		else if (max == 8)
 			newGenes += "0";
 		else
 			newGenes += decD;

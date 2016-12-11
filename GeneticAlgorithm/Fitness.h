@@ -19,11 +19,11 @@ class Fitness
 {
 	private:
 		string solution;
-		Mat source;
 		CvMat src;
 		unsigned char *BGRdata;
-		int firstSpecimen=1;
+		float firstSpecimen=1;
 	public:
+		Mat source;
 		int method = 0;
 		Fitness();
 		void Initialize(int num);
@@ -41,7 +41,8 @@ Fitness::Fitness()
 	}
 	cout << "2. Source image read" << endl;
 	BGRdata = (unsigned char*)(source.data);
-	cout << "3. Image decoded" << endl;
+	resize(source, source, Size(128,128));
+	cout << "3. Image decoded. Rows: " << source.rows << endl;
 }
 
 void Fitness::Initialize(int num)
@@ -51,20 +52,22 @@ void Fitness::Initialize(int num)
 
 double Fitness::getSim(Mat image, int number)
 {
-	Mat test;
-	resize(image, test, source.size());
+	Mat test, tempsrc;
+	//if(test.rows!=source.rows)
+	//	resize(source, source, image.size());
+	test = image;
 	unsigned char *imageData = (unsigned char*)(test.data);
 	CvMat temp = test;
 
-	int cols = source.cols;
-	int rows = source.rows;
+	int cols = test.cols;
+	int rows = test.rows;
 	long fit = 0;
 
 	for (int i = 0;i < cols;i++) {
-		//int multiplier = 0;
+		//double multiplier = 1.0;
 		for (int j = 0;j < rows;j++) {
-			//if (i > 61 && i < 97 && j<76 && j>10)
-				//multiplier = 3;
+			//if (i > 35 && i < 95)
+			//	multiplier = 2.0;
 
 			Point3_<uchar>* p = test.ptr<Point3_<uchar> >(j, i);
 			Point3_<uchar>* s = source.ptr<Point3_<uchar> >(j, i);
@@ -77,8 +80,10 @@ double Fitness::getSim(Mat image, int number)
 			fit -= (sqrt((((512 + mean)*r*r) >> 8) + 4 * g*g + (((767 - mean)*b*b) >> 8)));
 		}
 	}
-//	cout << fit << " " << firstSpecimen << endl;
-	return ((double)(fit - firstSpecimen)*100/firstSpecimen);
+	//cout << fit << " " << firstSpecimen << endl;
+	if (firstSpecimen== 1)
+		return fit;
+	return ((double)(firstSpecimen - fit)*100/firstSpecimen);
 }
 
 #endif

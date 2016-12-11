@@ -54,7 +54,7 @@ void Specimen::showCircle(char genes[])
 		temp += genes[currentGene];
 	int bB= atoi(temp.c_str());
 	temp = "";
-	image.setTo(cv::Scalar(0, 0, 0));
+	image.setTo(cv::Scalar(255, 255, 255));
 
 	for (int j = 0;j < 50;j++)
 	{
@@ -134,7 +134,7 @@ void Specimen::generate()
 		geneNum += 3;
 
 		//Radius
-		temp = rand() % 32;
+		temp = rand() % 26;
 		genes[geneNum] = temp / 100 + 48;
 		genes[geneNum + 1] = (temp / 10) % 10 + 48;
 		genes[geneNum + 2] = temp % 10 + 48;
@@ -162,22 +162,14 @@ void Specimen::generate()
 
 double Specimen::fitness(Fitness solution)
 {
-	if (fit == -1)
+	if (fit == -1 || image.rows==0)
 	{
 		double sum = 0;
 		image = Mat::zeros(128, 128, CV_8UC3);
 		showCircle(genes);
 
-		/*string temp;
-		for (int i = 0;i < 2;i++)
-			temp += genes[i];*/
-		//int circlesNum = atoi(temp.c_str());
-
 		similarity[0] = solution.getSim(image, 0);
 		fit = similarity[0];
-
-		/*if(fit>38)
-			fit += (solution.getSim(image, 1)/2);*/
 	}
 
 	return fit;
