@@ -43,8 +43,9 @@ int main(int argc, char** argv)
 
 	bool cont = true;
 	float threshold = test.getFittest(solution).fitness(solution);
-	solution.Initialize(threshold);
-	printf("First specimen fitness: %f\n", threshold);
+
+	solution.Initialize(test.getFittest(solution).image);
+
 	float last = 0.0;
 	bool color = false;
 	vector<float> data;
@@ -57,7 +58,7 @@ int main(int argc, char** argv)
 
 		if (generationsCount % 5 == 0)
 		{
-			printf("\r#%i Fitness: %f%c", generationsCount, fitness, '%');
+			printf("\r#%i Fitness: %f%c (%f/%f)", generationsCount, fitness, '%', test.getFittest(solution).similarity[0], test.getFittest(solution).similarity[1]);
 		}
 		//else if (fitness > last)
 		//{
@@ -78,7 +79,9 @@ int main(int argc, char** argv)
 
 		data.push_back(fitness);
 		imshow("Image", test.getFittest(solution).image);
+		imshow("Image Canny", test.getFittest(solution).imageCanny);
 		imshow("Source", solution.source);
+		imshow("Source Canny", solution.canny);
 		waitKey(1);
 	}
 	Mat temp = test.getFittest(solution).image;

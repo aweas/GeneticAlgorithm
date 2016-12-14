@@ -64,7 +64,7 @@ void Evolve::fill()
 	{
 		int limit = 1;
 		if (i < elite)
-			limit = (size / (3 * (i + 2)));
+			limit = (size / (3 * (i + 1)));
 
 		for (int j=0; j < limit && counter< 0.9*size; j++, counter++)
 			temporaryPopulation.addSpecimen((*population).getSpecimen(i).getGenes(), counter);

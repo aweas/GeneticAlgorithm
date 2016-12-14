@@ -20,13 +20,16 @@ class Specimen
 		double fit=-1;
 
 	public:
+		Mat image, imageCanny;
 		double similarity[3];
 		double genesLength = SOLUTION_LENGTH;
+
 		void generate();
 		double fitness(Fitness solution);
 		string getGenes();
 		string getGenes(int i);
-		Mat image;
+		void generateCanny();
+		Mat getCanny();
 		void setGenes(string data);
 		void showCircle(char genes[]);
 		int BinToDec(string number);
@@ -160,6 +163,21 @@ void Specimen::generate()
 	//cout << sizeof(genes)/sizeof(char) << endl;
 }
 
+void Specimen::generateCanny()
+{
+	cvtColor(image, imageCanny, CV_BGR2GRAY);
+	blur(imageCanny, imageCanny, Size(3, 3));
+	Canny(imageCanny, imageCanny, 50, 150, 3);
+}
+
+Mat Specimen::getCanny()
+{
+	cvtColor(image, imageCanny, CV_BGR2GRAY);
+	blur(imageCanny, imageCanny, Size(3, 3));
+	Canny(imageCanny, imageCanny, 50, 150, 3);
+
+	return imageCanny;
+}
 double Specimen::fitness(Fitness solution)
 {
 	if (fit == -1 || image.rows==0)
@@ -168,8 +186,12 @@ double Specimen::fitness(Fitness solution)
 		image = Mat::zeros(128, 128, CV_8UC3);
 		showCircle(genes);
 
+		//generateCanny();
+
 		similarity[0] = solution.getSim(image, 0);
-		fit = similarity[0];
+		similarity[1] = solution.getSim(getCanny(), 1);
+		//cout << similarity[0] << " : " << similarity[1] << endl;
+		fit = (similarity[0]*4+similarity[1])/5;
 	}
 
 	return fit;
