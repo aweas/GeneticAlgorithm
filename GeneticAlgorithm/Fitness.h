@@ -19,11 +19,15 @@ class Fitness
 {
 	private:
 		string solution;
-		Mat source;
 		CvMat src;
 		unsigned char *BGRdata;
-		int firstSpecimen=1;
+		float firstSpecimen;
+		int kernel_size = 3;
+		int ratio = 3;
+		int lowThreshold;
+		int const max_lowThreshold = 100;
 	public:
+		Mat source, canny;
 		int method = 0;
 		Fitness();
 		void Initialize(int num);
@@ -33,6 +37,8 @@ class Fitness
 
 Fitness::Fitness()
 {
+	Mat temp;
+
 	source = imread("asdf.jpg", 1);
 	if (!source.data)
 	{
@@ -40,7 +46,9 @@ Fitness::Fitness()
 		cin.get();
 	}
 	cout << "2. Source image read" << endl;
-	BGRdata = (unsigned char*)(source.data);
+	cvtColor(source, temp, CV_BGR2GRAY);
+	blur(temp, canny, Size(3, 3));
+	Canny(canny, canny, 50, 150, kernel_size);
 	cout << "3. Image decoded" << endl;
 }
 
@@ -78,7 +86,8 @@ double Fitness::getSim(Mat image, int number)
 		}
 	}
 //	cout << fit << " " << firstSpecimen << endl;
-	return ((double)(fit - firstSpecimen)*100/firstSpecimen);
+	//return ((double)(fit - firstSpecimen)*100/firstSpecimen);
+	return fit;
 }
 
 #endif

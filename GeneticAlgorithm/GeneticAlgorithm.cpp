@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 	bool color = false;
 	vector<float> data;
 
-	for (int i = 0;i<300 && !_kbhit();i++, generationsCount++)
+	for (int i = 0;!_kbhit();i++, generationsCount++)
 	{
 		evolvePop.EvolvePop();
 
@@ -63,19 +63,24 @@ int main(int argc, char** argv)
 			last = fitness;
 		}
 
+		imshow("Image canny", test.getFittest(solution).getCanny());
+
 		if (fitness>threshold)
 		{
 			Mat temp = test.getFittest(solution).image;
 			string name = "Similarity"+ to_string(fitness)+".jpg";
-			string simOne = "Generation: " + to_string(generationsCount);
+			string simOne = "G: " + to_string(generationsCount);
 
-			putText(temp, simOne.c_str(), cvPoint(30, 60), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
+			putText(temp, simOne.c_str(), cvPoint(0, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 0), 1, CV_AA);
 			imwrite(name.c_str(), temp);
 			threshold = fitness + 0.5;
 		}
 
 		data.push_back(fitness);
 		imshow("Image", test.getFittest(solution).image);
+		
+		imshow("Source", solution.source);
+		imshow("Source canny", solution.canny);
 		waitKey(1);
 	}
 	Mat temp = test.getFittest(solution).image;

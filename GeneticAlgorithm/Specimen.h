@@ -15,21 +15,24 @@ using namespace cv;
 
 class Specimen
 {
-	private:
-		char genes[SOLUTION_LENGTH];
-		double fit=-1;
+private:
+	char genes[SOLUTION_LENGTH];
+	double fit = -1;
 
-	public:
-		double similarity[3];
-		double genesLength = SOLUTION_LENGTH;
-		void generate();
-		double fitness(Fitness solution);
-		string getGenes();
-		string getGenes(int i);
-		Mat image;
-		void setGenes(string data);
-		void showCircle(char genes[]);
-		int BinToDec(string number);
+public:
+	Mat image, imageCanny;
+	double similarity[3];
+	double genesLength = SOLUTION_LENGTH;
+
+	void generate();
+	double fitness(Fitness solution);
+	string getGenes();
+	string getGenes(int i);
+	void generateCanny();
+	Mat getCanny();
+	void setGenes(string data);
+	void showCircle(char genes[]);
+	int BinToDec(string number);
 };
 
 void Specimen::showCircle(char genes[])
@@ -54,9 +57,9 @@ void Specimen::showCircle(char genes[])
 		temp += genes[currentGene];
 	int bB= atoi(temp.c_str());
 	temp = "";
-	image.setTo(cv::Scalar(255, 255, 255));
+	image.setTo(cv::Scalar(0, 0, 0));
 
-	for (int j = 0;j < circlesNum;j++)
+	for (int j = 0;j < 50;j++)
 	{
 		for (int i = 0;i < 3;i++, currentGene++)
 			temp += genes[currentGene];
@@ -103,6 +106,16 @@ void Specimen::showCircle(char genes[])
 		}
 	}
 
+}
+
+
+Mat Specimen::getCanny()
+{
+	cvtColor(image, imageCanny, CV_BGR2GRAY);
+	blur(imageCanny, imageCanny, Size(3, 3));
+	Canny(imageCanny, imageCanny, 50, 150, 3);
+
+	return imageCanny;
 }
 
 void Specimen::generate()
